@@ -1,19 +1,16 @@
-import { FaQuoteLeft, FaRegCheckCircle } from "react-icons/fa";
-import { IoDocumentTextOutline, IoStorefrontOutline } from "react-icons/io5";
+import {  FaRegCheckCircle } from "react-icons/fa";
+import { IoDocumentTextOutline } from "react-icons/io5";
 import {
   MdOutlineShoppingCart,
   MdOutlineSpeed,
-  MdOutlineSell,
-  MdOutlineAttachMoney,
   MdOutlinePayment,
   MdOutlineProductionQuantityLimits,
   MdTask,
-  MdOutlineRefresh,
 } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 
 import { RiBillLine } from "react-icons/ri";
-import { TbLockAccess, TbTruckDelivery, TbUsersGroup } from "react-icons/tb";
+import { TbLockAccess, TbTruckDelivery } from "react-icons/tb";
 import { SlDirection } from "react-icons/sl";
 import { FaHandsHelping } from "react-icons/fa";
 import { SiScrapy } from "react-icons/si";
@@ -24,8 +21,6 @@ import { GiProgression } from "react-icons/gi";
 import Products from "../pages/Products";
 import Approvals from "../pages/Approvals";
 import Stores from "../pages/Stores";
-import Buyers from "../pages/Buyers";
-import Sellers from "../pages/Sellers";
 import BOM from "../pages/BOM";
 
 import UserRole from "../pages/UserRoles";
@@ -46,19 +41,11 @@ import { IoIosPeople } from "react-icons/io";
 import Task from "../pages/Task";
 import { 
   Box,
-  Calendar,
   Component,
-  Construction,
-  Container,
   HandCoins,
-  Presentation,
   ScanBarcode,
-  ShieldCheck,
   Store,
-  TicketPercent,
-  Workflow,
   Wrench,
-  BarChart3,
   Activity,
 } from "lucide-react";
 import Dashboard from "../pages/Dashboard";
@@ -75,7 +62,7 @@ const routes = [
   {
     name: "Dashboard",
     icon: <MdOutlineSpeed />,
-    path: "",
+    path: "/",
     element: <Dashboard />,
     isSublink: false,
   },
