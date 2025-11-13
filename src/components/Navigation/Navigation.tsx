@@ -1,13 +1,15 @@
 // @ts-nocheck
 
 import { FaAngleDown, FaAngleUp, FaSignOutAlt } from "react-icons/fa";
-import routes from "../../routes/routes";
-import { NavLink, Navigate, useNavigate } from "react-router-dom";
+
+import RTPAS from "../../routes/routes";
+import SOPAS  from "../../routes/SOPAS.routes"
+import KONTRONIX from "../../routes/KONTRONIX.routes"
+import { NavLink,  useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { RiMenu2Line } from "react-icons/ri";
-import logo from "../../assets/images/logo/logo.png";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
@@ -16,17 +18,11 @@ const Navigation: React.FC = () => {
   const [cookie, _, removeCookie] = useCookies();
   const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
   const [checkMenu, setCheckMenu] = useState(false);
-  const [showIcon, setShowIcon] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>(
     {}
   );
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowIcon(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+
 
   const handleCloseMenu = () => {
     if (window.innerWidth < 800) {
@@ -49,6 +45,35 @@ const Navigation: React.FC = () => {
       toast.error(error.message || "Something went wrong");
     }
   };
+
+
+
+  
+
+  const handleRoutes = (path) => {
+    switch (path) {
+      case "RTPAS":
+        return RTPAS;
+      case "SOPAS":
+        return SOPAS;
+      case "KONTRONIX":
+        return KONTRONIX
+      default:
+        return [];
+
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
   return (
     <>
 
@@ -95,7 +120,7 @@ const Navigation: React.FC = () => {
         {/* Menu List */}
         <div className="px-4 py-6">
           <ul className="space-y-2 whitespace-nowrap">
-            {routes.map((route, ind) => {
+            {handleRoutes("RTPAS").map((route, ind) => {
               const isAllowed =
                 route.name === "Dashboard" ||
                 isSuper ||

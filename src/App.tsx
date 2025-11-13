@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +7,9 @@ import Login from "./pages/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Register from "./pages/Register";
 import Layout from "./pages/Layout";
-import routes from "./routes/routes";
+import RTPAS from "./routes/routes";
+import SOPAS  from "./routes/SOPAS.routes"
+import KONTRONIX from "./routes/KONTRONIX.routes"
 import { useSelector } from "react-redux";
 import NotFound from "./pages/NotFound";
 import LandingLayout from "./landing/LandingLayout";
@@ -18,7 +21,21 @@ import SessionExpired from "./pages/SessionExpired";
 const App: React.FC = () => {
   const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
 
-   const [cookies] = useCookies();
+  const [cookies] = useCookies();
+
+  const handleRoutes = (path) => {
+    switch (path) {
+      case "RTPAS":
+        return RTPAS;
+      case "SOPAS":
+        return SOPAS;
+      case "KONTRONIX":
+        return KONTRONIX
+      default:
+        return [];
+
+    }
+  }
 
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
@@ -38,8 +55,8 @@ const App: React.FC = () => {
 
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}
-           {cookies.access_token && <Route path="/" element={<Layout />}>
-              {routes.map((route, ind) => {
+            {cookies.access_token && <Route path="/" element={<Layout />}>
+              {handleRoutes("RTPAS").map((route, ind) => {
                 const isAllowed =
                   isSuper ||
                   allowedroutes.includes(route.path.replaceAll("/", ""));
