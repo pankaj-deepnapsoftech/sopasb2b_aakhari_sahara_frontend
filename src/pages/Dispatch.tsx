@@ -57,7 +57,6 @@ const Dispatch = () => {
       typeof dispatch.invoice !== "object" ||
       !dispatch.invoice.total
     ) {
-      console.log("No valid invoice data found - returning Unpaid");
       return "Unpaid";
     }
 
@@ -65,27 +64,19 @@ const Dispatch = () => {
     const invoiceTotal = parseFloat(dispatch.invoice.total) || 0;
     const invoiceBalance = parseFloat(dispatch.invoice.balance) || 0;
 
-    console.log(
-      `Final values - Total: ${invoiceTotal}, Balance: ${invoiceBalance}`
-    );
+  
 
     let status;
     if (invoiceBalance === 0) {
       status = "Paid";
-      console.log(`Status: Paid (balance === 0)`);
     } else if (invoiceTotal === invoiceBalance) {
       status = "Unpaid";
-      console.log(`Status: Unpaid (total === balance)`);
     } else if (invoiceTotal > invoiceBalance && invoiceBalance > 0) {
       status = "Partial Paid";
-      console.log(`Status: Partial Paid (total > balance > 0)`);
     } else {
       status = "Unpaid";
-      console.log(`Status: Unpaid (fallback)`);
     }
 
-    console.log(`Final status:`, status);
-    console.log(`=== End Debug ===`);
 
     return status;
   };
@@ -174,7 +165,7 @@ const Dispatch = () => {
 
       GetDispatch();
     } catch (error) {
-      console.error("Upload error:", error);
+     
       toast.error(
         `Failed to upload ${
           uploadType === "delivery" ? "delivery proof" : "invoice"
@@ -219,7 +210,7 @@ const Dispatch = () => {
         setShowModal(false);
         GetDispatch();
       } catch (error) {
-        console.log(error);
+        
         toast.error("Failed to update tracking information");
       } finally {
         setIsSubmitting(false);
@@ -346,7 +337,7 @@ const Dispatch = () => {
 
       setData(dispatchData);
     } catch (error) {
-      console.error("Error fetching dispatch data:", error);
+    
       toast.error("Failed to fetch dispatch data");
     } finally {
       setIsLoading(false);
@@ -574,7 +565,7 @@ const Dispatch = () => {
   //   );
   // }
 
-  console.log("daaaaata", data);
+
 
   return (
     <div
@@ -1349,7 +1340,7 @@ const Dispatch = () => {
                                     "Latest delivery proof downloaded successfully"
                                   );
                                 } catch (error) {
-                                  console.error("Download error:", error);
+                                  
                                   toast.error("Failed to download file");
                                 }
                               }}
@@ -1449,7 +1440,7 @@ const Dispatch = () => {
                                 document.body.removeChild(link);
                                 window.URL.revokeObjectURL(url);
                               } catch (error) {
-                                console.error("Download error:", error);
+                               
                                 toast.error("Failed to download file");
                               }
                             }}

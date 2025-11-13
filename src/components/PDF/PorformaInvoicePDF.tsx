@@ -237,9 +237,7 @@ const PorformaInvoicePDF = ({ proformaInvoice, userData }: any) => {
   const cgst = (subtotal * 9) / 100;
   const sgst = (subtotal * 9) / 100;
   const total = subtotal + cgst + sgst;
-  console.log("Proforma Invoice Userdata",userData);
 
-  console.log(proformaInvoice);
   return (
     <Document>
       <Page size="A4" style={styles.page}>

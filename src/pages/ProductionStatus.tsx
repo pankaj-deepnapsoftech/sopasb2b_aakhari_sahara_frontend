@@ -63,7 +63,6 @@ const ProductionStatus: React.FC = () => {
           ].includes(process.status.toLowerCase())
       );
 
-      console.log("filtered production started processes", filteredProcesses);
       setData(filteredProcesses);
       setFilteredData(filteredProcesses);
     } catch (error: any) {
@@ -145,7 +144,6 @@ const ProductionStatus: React.FC = () => {
             ?.join("")
             ?.includes(searchText?.replaceAll("/", "") || ""))
     );
-    console.log("search results", results);
     setFilteredData(results);
   }, [searchKey]);
 

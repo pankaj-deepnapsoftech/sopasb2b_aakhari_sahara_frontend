@@ -64,7 +64,7 @@ const Process: React.FC = () => {
     });
 
 
-    console.log("filtered processes (excluding production started)", filteredProcesses);
+    
     setData(filteredProcesses);
     setFilteredData(filteredProcesses);
   } catch (error: any) {
@@ -145,7 +145,6 @@ const Process: React.FC = () => {
             ?.join("")
             ?.includes(searchText?.replaceAll("/", "") || ""))
     );
-    console.log("search results", results);
     setFilteredData(results);
   }, [searchKey]);
 

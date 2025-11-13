@@ -163,7 +163,6 @@ const ProformaInvoice: React.FC = () => {
     );
   }
  
-  console.log(filteredData)
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 lg:p-3">

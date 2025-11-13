@@ -328,7 +328,7 @@ interface InvoicePDFProps {
 
 const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice,userData }) => {
 
-  console.log("here it is invoicce :::000",invoice)
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-IN", {
@@ -363,8 +363,8 @@ const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice,userData }) => {
 
   const customer = invoice.buyer || invoice.supplier;
   const isSupplier = !!invoice.supplier;
-  console.log("Ye hai customer ::: ",customer)
-  console.log("invoice ka buyer :: ",invoice.buyer);
+  
+
 
   // Safe access to nested properties
   const invoiceNumber = invoice.invoice_no || invoice.invoiceNo || "N/A";
@@ -387,8 +387,6 @@ const InvoicePDF: React.FC<InvoicePDFProps> = ({ invoice,userData }) => {
   const taxAmount = invoice.tax?.tax_amount || 0;
   const taxName = invoice.tax?.tax_name || "No Tax";
   const note = invoice.note || invoice.remarks || "";
-  console.log("-----items:::",items)
-    console.log("-----items:::",items[0])
 
   return (
     <Document>
