@@ -1,44 +1,80 @@
 //@ts-nocheck
 import { motion } from "framer-motion";
-import { 
-  Cog, 
-  Activity, 
-  Factory, 
-  Workflow, 
-  CloudLightning, 
-  ShieldCheck 
+import {
+  Cog,
+  Activity,
+  Factory,
+  Workflow,
+  CloudLightning,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function ServicesSection() {
   const services = [
     {
       title: "Production Tracking",
-      desc: "Monitor every step of your manufacturing in realtime with automated insights.",
+      desc: "Monitor every step of your manufacturing in real time with intelligent analytics and smart dashboards. Visualize production flow, machine uptime, and operator performance instantly.",
+      details: [
+        "📊 Live status updates for every production unit",
+        "⚙️ Real-time analytics on performance and downtime",
+        "🔔 Automated alerts for production delays or errors",
+        "📈 Improve overall efficiency through continuous monitoring",
+      ],
       icon: Activity,
     },
     {
       title: "Workflow Automation",
-      desc: "Eliminate manual work using no-code automation triggers tailored to your factory.",
+      desc: "Eliminate repetitive manual tasks with no-code automation triggers designed for your factory operations. Focus on growth while we handle the workflow logic.",
+      details: [
+        "⚡ Set up automated approval flows and process triggers",
+        "🔄 Seamless integration with existing ERP systems",
+        "🧠 Custom automation scripts with zero coding",
+        "🕒 Save time and minimize human errors in every step",
+      ],
       icon: Workflow,
     },
     {
       title: "Smart Manufacturing",
-      desc: "AI-powered predictions to help you scale and optimize your plant capacity.",
+      desc: "Empower your production units with AI-driven insights that optimize your plant’s capacity and resource allocation for maximum profitability.",
+      details: [
+        "🤖 AI-driven performance optimization",
+        "🔍 Predictive analytics for supply and demand",
+        "📦 Resource utilization and production forecasting",
+        "🚀 Scale manufacturing without increasing costs",
+      ],
       icon: Factory,
     },
     {
       title: "Cloud Sync & Backup",
-      desc: "Instant data sync across all departments with secure cloud backups.",
+      desc: "Keep your business connected and your data secure with automatic backups and real-time synchronization across all departments.",
+      details: [
+        "☁️ Cloud-based storage for fast and reliable access",
+        "🔐 End-to-end encrypted data transfers",
+        "🕓 Instant file sync and real-time updates",
+        "🧭 Cross-department collaboration made easy",
+      ],
       icon: CloudLightning,
     },
     {
       title: "Maintenance Alerts",
-      desc: "Receive automated reminders and alerts for machine upkeep and downtime reduction.",
+      desc: "Predict equipment failures before they happen with automated alerts and smart maintenance scheduling powered by IoT sensors.",
+      details: [
+        "🔔 Automated machine health monitoring",
+        "🛠️ Predictive maintenance alerts for every unit",
+        "📅 Maintenance logs and schedule tracking",
+        "⚙️ Reduce downtime and extend equipment lifespan",
+      ],
       icon: Cog,
     },
     {
       title: "Secure Infrastructure",
-      desc: "99.9% uptime with enterprise-grade security & end-to-end encryption.",
+      desc: "Your data and processes are protected with enterprise-grade security protocols, ensuring 99.9% uptime and compliance with global standards.",
+      details: [
+        "🔒 256-bit SSL data encryption",
+        "🧱 Firewall and intrusion detection systems",
+        "🛡️ Secure APIs for integration with third-party tools",
+        "⏱️ High-availability architecture with load balancing",
+      ],
       icon: ShieldCheck,
     },
   ];
@@ -65,7 +101,7 @@ export default function ServicesSection() {
         <motion.h2
           initial={{ opacity: 0, y: -40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}   // ✅ stops repeat on scroll
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-5xl md:text-6xl font-extrabold text-blue-900 text-center"
         >
@@ -75,11 +111,13 @@ export default function ServicesSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}   // ✅ stops repeat on scroll
+          viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="text-blue-600 text-center max-w-2xl mx-auto mt-4 text-lg"
+          className="text-blue-600 text-center max-w-3xl mx-auto mt-4 text-lg leading-relaxed"
         >
-          A complete automation ecosystem built to power modern manufacturing workflows.
+          We deliver a complete suite of intelligent manufacturing solutions — from
+          automation and analytics to real-time production visibility — all designed
+          to scale your operations effortlessly.
         </motion.p>
 
         {/* Cards */}
@@ -89,26 +127,43 @@ export default function ServicesSection() {
               key={i}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}   // ✅ stops repeat on scroll
+              viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.6 }}
-              whileHover={{ scale: 1.05, rotate: 0.5 }}
+              whileHover={{ scale: 1.05 }}
               className="group bg-white/80 border border-blue-200 backdrop-blur-xl p-8 rounded-3xl shadow-xl cursor-pointer 
               hover:shadow-2xl transition-all duration-300 hover:bg-white"
             >
-              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex justify-center items-center mb-6 
-                group-hover:bg-blue-200 transition-all duration-300">
+              {/* Icon */}
+              <div
+                className="w-16 h-16 rounded-2xl bg-blue-100 flex justify-center items-center mb-6 
+                group-hover:bg-blue-200 transition-all duration-300"
+              >
                 <service.icon className="text-blue-700 w-8 h-8" />
               </div>
 
+              {/* Title & Description */}
               <h3 className="text-2xl font-bold text-blue-900 mb-3">
                 {service.title}
               </h3>
+              <p className="text-blue-600 mb-4 leading-relaxed">{service.desc}</p>
 
-              <p className="text-blue-600">
-                {service.desc}
-              </p>
+              {/* Bullet List */}
+              <ul className="space-y-2 text-blue-700 text-sm pl-2">
+                {service.details.map((point, idx) => (
+                  <motion.li
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + idx * 0.05 }}
+                    className="flex items-start gap-2"
+                  >
+                    <span>{point}</span>
+                  </motion.li>
+                ))}
+              </ul>
 
-              {/* bottom accent line */}
+              {/* Bottom Accent Line */}
               <motion.div
                 initial={{ width: 0 }}
                 whileHover={{ width: "100%" }}
