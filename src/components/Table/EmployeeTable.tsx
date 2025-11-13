@@ -166,8 +166,8 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                   boxShadow: `0 0 0 1px ${colors.primary[500]}`,
                 }}
               >
-                {[5,10, 20, 50, 100, 100000].map((size) => (
-                  <option key={size} value={size}>
+                {[5, 10, 20, 50, 100, 100000].map((size) => (
+                  <option key={`page-size-${size}`} value={size}>
                     {size === 100000 ? "All" : size}
                   </option>
                 ))}
@@ -202,18 +202,20 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                   bg={colors.table.header}
                 >
 
-                    {headerGroups.map((hg) => (
+                    {headerGroups.map((headerGroup, index) => (
                       <Tr
-                        {...hg.getHeaderGroupProps()}
+                        key={index}
+                        {...headerGroup.getHeaderGroupProps()}
                         borderBottom="1px solid"
                         borderColor={colors.table.border}
                       >
-                        {hg.headers.map((column) => (
+                        {headerGroup.headers.map((column, idx) => (
                           <Th
+                            key={idx} 
                             {...column.getHeaderProps(column.getSortByToggleProps())}
                             fontSize="14px"
                             fontWeight="600"
-                            position={column.id === "first_name" ? "sticky" : "sticky"} // keep all headers sticky
+                            position="sticky"
                             top={0}
                             left={column.id === "first_name" ? 0 : undefined}
                             zIndex={column.id === "first_name" ? 4 : 3}
@@ -231,6 +233,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 
                         ))}
                         <Th
+                          key="actions"
                           fontSize="14px"
                           fontWeight="600"
                           color="gray.700"
@@ -245,10 +248,11 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                   </Thead>
 
                   <Tbody {...getTableBodyProps()}>
-                    {page.map((row, index) => {
+                    {page.map((row) => {
                       prepareRow(row);
                       return (
                         <Tr
+                          key={row.id}
                           {...row.getRowProps()}
                           _hover={{
                             bg: colors.table.hover,
@@ -257,19 +261,20 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                             transition: "all 0.2s ease",
                             shadow: "md",
                           }}
-                          bgColor={dynamicBg(index)}
+                          bgColor={dynamicBg(row.index)}
                           transition="all 0.2s ease"
                           borderBottom="1px solid"
                           borderColor={colors.table.border}
                         >
-                          {row.cells.map((cell) => (
+                          {row.cells.map((cell, index) => (
                             <Td
+                              key={index}
                               {...cell.getCellProps()}
                               fontSize="14px"
                               position={cell.column.id === "first_name" ? "sticky" : "static"}
                               left={cell.column.id === "first_name" ? 0 : undefined}
                               zIndex={cell.column.id === "first_name" ? 1 : undefined}
-                              bg={cell.column.id === "first_name" ? dynamicBg(index) : undefined}
+                              bg={cell.column.id === "first_name" ? dynamicBg(row.index) : undefined}
                               px={4}
                               py={3}
                             >
@@ -354,7 +359,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                               )}
                             </Td>
                           ))}
-                          <Td px={4} py={3}>
+                          <Td key={`actions-${row.id}`} px={4} py={3}>
                             <div className="flex items-center gap-2">
                               {openEmployeeDetailsDrawerHandler && (
                                 <button

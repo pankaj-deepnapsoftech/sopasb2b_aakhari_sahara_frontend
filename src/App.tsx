@@ -13,6 +13,7 @@ import LandingLayout from "./landing/LandingLayout";
 import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
+import SessionExpired from "./pages/SessionExpired";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
@@ -32,6 +33,8 @@ const App: React.FC = () => {
             </Route>}
 
             <Route path="/login" element={<Login />} />
+
+            <Route path="/session" element={<SessionExpired />} />
 
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}

@@ -108,7 +108,7 @@ const Footer = () => {
               className="cursor-pointer flex-shrink-0"
              onClick={() => navigate("/")}
             >
-              <img src="/DeepnapLogo.png" alt="Itsybizz Logo" className="h-20 w-auto" />
+              <img src="/DeepnapSoftech.png" alt="Itsybizz Logo" className="h-14 w-auto" />
             </motion.div>
 
             <p className="text-sm text-blue-600 mb-4 font-medium">Follow Us On</p>
