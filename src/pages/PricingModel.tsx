@@ -107,6 +107,7 @@ export default function PricingSection() {
             const verifyJson = await verifyResp.json();
             if (verifyJson?.success) {
               alert('Payment successful and verified.');
+              window.location.href = "/"
               // Optionally update UI / redirect
             } else {
               alert('Payment processed but verification failed.');
@@ -121,7 +122,7 @@ export default function PricingSection() {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      window.location.href = "/"
+      // window.location.href = "/"
     } catch (e) {
       alert('Unable to start payment: ' + (e.message || e));
     }
