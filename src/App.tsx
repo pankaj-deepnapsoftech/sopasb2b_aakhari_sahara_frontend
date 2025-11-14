@@ -18,7 +18,6 @@ import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SubscriptionEnd";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
-import SubscriptionExpired from "./pages/SessionExpired";
 import { isSubscriptionEnd } from "./utils/dateModifyer";
 
 const App: React.FC = () => {
@@ -27,7 +26,7 @@ const App: React.FC = () => {
   const [cookies] = useCookies();
 
 
- const {
+  const {
     data: user,
     isLoading
   } = useGetLoggedInUserQuery(
@@ -50,17 +49,20 @@ const App: React.FC = () => {
   }
 
 
- if(isLoading){
+
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (user) {
+      if (isSubscriptionEnd(user?.user[0]?.subscription_end)) {
+        Navigate("subscription-end")
+      }
+    }
+  }, [user])
+
+    if (isLoading) {
     return "loading ./......"
   }
-
-  useEffect(()=>{
-    if(user){
-       if(isSubscriptionEnd(user?.user[0]?.subscription_end)){
-        Navigate("subscription-end")
-       }
-    }
-  },[user]) 
 
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
@@ -76,7 +78,7 @@ const App: React.FC = () => {
 
             <Route path="/login" element={<Login />} />
 
-            <Route path="/subscription-end" element={<SubscriptionExpired />} />
+            <Route path="/subscription-end" element={<SessionExpired />} />
 
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}
