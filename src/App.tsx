@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -8,9 +8,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Register from "./pages/Register";
 import Layout from "./pages/Layout";
 import RTPAS from "./routes/routes";
-import SOPAS  from "./routes/SOPAS.routes"
+import SOPAS from "./routes/SOPAS.routes"
 import KONTRONIX from "./routes/KONTRONIX.routes"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NotFound from "./pages/NotFound";
 import LandingLayout from "./landing/LandingLayout";
 import PublicRoutes from "./routes/Public.routes"
@@ -18,20 +18,20 @@ import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SessionExpired";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
+import { setSubscriptionData } from "./redux/reducers/subscription";
 
 const App: React.FC = () => {
-  const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
+  const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
   const [cookies] = useCookies();
 
-    const userId = "6916c4d45bf85a4ac084ce7d";
   const {
     data: user,
     isLoading
   } = useGetLoggedInUserQuery(
-    cookies.access_token ? userId : skipToken
+    cookies.access_token ? id : skipToken
   );
 
-console.log("User:", user);
 
 
 
@@ -49,7 +49,14 @@ console.log("User:", user);
     }
   }
 
-  if(isLoading){
+
+  useEffect(() => {
+    if (user) {
+      dispatch(setSubscriptionData(user?.user[0]))
+    }
+  }, [dispatch, user]);
+
+  if (isLoading) {
     return "loading....................."
   }
 
