@@ -70,6 +70,11 @@ const api = createApi({
       }),
       invalidatesTags: ["Auth"],
     }),
+    getLoggedInUser: builder.query({
+      query: (id) => `auth/user/${id}`,
+      providesTags: ["Auth"]
+    })
+
   }),
 });
 
@@ -680,6 +685,7 @@ export const {
   useResendOTPMutation,
   useResetPasswordMutation,
   useForgetPasswordMutation,
+  useGetLoggedInUserQuery
 } = api;
 
 // Product APIs

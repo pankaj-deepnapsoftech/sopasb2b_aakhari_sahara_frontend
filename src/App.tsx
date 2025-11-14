@@ -17,11 +17,23 @@ import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SessionExpired";
+import { useGetLoggedInUserQuery } from "./redux/api/api";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
-
   const [cookies] = useCookies();
+
+    const userId = "6916c4d45bf85a4ac084ce7d";
+  const {
+    data: user,
+    isLoading
+  } = useGetLoggedInUserQuery(
+    cookies.access_token ? userId : skipToken
+  );
+
+console.log("User:", user);
+
+
 
   const handleRoutes = (path) => {
     switch (path) {
@@ -35,6 +47,10 @@ const App: React.FC = () => {
         return [];
 
     }
+  }
+
+  if(isLoading){
+    return "loading....................."
   }
 
   return (
