@@ -20,3 +20,10 @@ export const CheckSubscriptionIsEnd = (date) => {
 
     return endDate <= now 
 }
+
+export const isSubscriptionEnd = (date) => {
+  const endDate = new Date(date);
+    const now = new Date();
+
+    return endDate < now 
+}

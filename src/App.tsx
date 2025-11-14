@@ -19,6 +19,7 @@ import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SessionExpired";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
 import SubscriptionExpired from "./pages/SessionExpired";
+import { isSubscriptionEnd } from "./utils/dateModifyer";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
@@ -37,11 +38,11 @@ const App: React.FC = () => {
   const handleRoutes = (path) => {
     switch (path) {
       case "RTPAS":
-        return RTPAS;
+        return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : RTPAS;
       case "SOPAS":
-        return SOPAS;
+        return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : SOPAS;
       case "KONTRONIX":
-        return KONTRONIX
+        return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : KONTRONIX
       default:
         return [];
 
@@ -52,6 +53,14 @@ const App: React.FC = () => {
  if(isLoading){
     return "loading ./......"
   }
+
+  useEffect(()=>{
+    if(user){
+       if(isSubscriptionEnd(user?.user[0]?.subscription_end)){
+        Navigate("")
+       }
+    }
+  },[user]) 
 
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
