@@ -16,9 +16,9 @@ import LandingLayout from "./landing/LandingLayout";
 import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
-import SessionExpired from "./pages/SessionExpired";
+import SessionExpired from "./pages/SubscriptionEnd";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
-import SubscriptionExpired from "./pages/SessionExpired";
+import SubscriptionExpired from "./pages/SubscriptionEnd";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
