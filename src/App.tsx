@@ -17,6 +17,7 @@ import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SessionExpired";
+import { useGetLoggedInUserQuery } from "./redux/api/api";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
@@ -24,7 +25,12 @@ const App: React.FC = () => {
   const [cookies] = useCookies();
 
 
-
+ const {
+    data: user,
+    isLoading
+  } = useGetLoggedInUserQuery(
+    cookies.access_token ? id : ""
+  );
 
 
   const handleRoutes = (path) => {
@@ -42,7 +48,9 @@ const App: React.FC = () => {
   }
 
 
-
+ if(isLoading){
+    return "loading ./......"
+  }
 
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
@@ -63,7 +71,7 @@ const App: React.FC = () => {
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}
             {cookies.access_token && <Route path="/" element={<Layout />}>
-              {handleRoutes("RTPAS").map((route, ind) => {
+              {handleRoutes(user?.user[0]?.plan).map((route, ind) => {
                 const isAllowed =
                   isSuper ||
                   allowedroutes.includes(route.path.replaceAll("/", ""));

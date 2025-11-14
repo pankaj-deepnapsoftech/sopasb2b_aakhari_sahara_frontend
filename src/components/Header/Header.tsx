@@ -8,8 +8,7 @@ import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import UserDetailsMenu from "../../ui/UserDetailsMenu";
-import { colors } from "../../theme/colors";
-import { LeftSubscriptionDays } from "../../utils/dateModifyer";
+import { CheckSubscriptionIsEnd, LeftSubscriptionDays } from "../../utils/dateModifyer";
 import { useGetLoggedInUserQuery } from "../../redux/api/api";
 // import { MdOutlineDashboardCustomize } from "react-icons/md";
 
@@ -115,10 +114,10 @@ const Header: React.FC = () => {
 
         <div className="flex items-center gap-4 ml-auto">
           <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            Free Trial Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end)} days
+            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end)} days
           </p>
 
-          <button
+         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && <><button
             className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
             onClick={() => navigate("/pricing-modal?action=renew")}
           >
@@ -131,6 +130,7 @@ const Header: React.FC = () => {
           >
             Upgrade
           </button>
+          </>}
 
           <button
             className="relative p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"

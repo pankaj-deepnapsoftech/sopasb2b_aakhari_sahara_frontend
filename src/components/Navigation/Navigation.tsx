@@ -12,16 +12,25 @@ import { IoCloseSharp } from "react-icons/io5";
 import { RiMenu2Line } from "react-icons/ri";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { useGetLoggedInUserQuery } from "../../redux/api/api";
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const [cookie, _, removeCookie] = useCookies();
-  const { allowedroutes, isSuper } = useSelector((state: any) => state.auth);
+  const { allowedroutes, isSuper,id } = useSelector((state: any) => state.auth);
   const [checkMenu, setCheckMenu] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>(
     {}
   );
 
+    const [cookies] = useCookies();
+
+  const {
+      data: user,
+      isLoading
+    } = useGetLoggedInUserQuery(
+      cookies.access_token ? id : ""
+    );
 
 
   const handleCloseMenu = () => {
@@ -70,6 +79,9 @@ const Navigation: React.FC = () => {
 
 
 
+  if(isLoading){
+    return "loading ./......"
+  }
 
 
 
@@ -120,7 +132,7 @@ const Navigation: React.FC = () => {
         {/* Menu List */}
         <div className="px-4 py-6">
           <ul className="space-y-2 whitespace-nowrap">
-            {handleRoutes("RTPAS").map((route, ind) => {
+            {handleRoutes(user?.user[0]?.plan).map((route, ind) => {
               // const isAllowed =
               //   route.name === "Dashboard" ||
               //   isSuper ||
