@@ -3,9 +3,9 @@
 import { FaAngleDown, FaAngleUp, FaSignOutAlt } from "react-icons/fa";
 
 import RTPAS from "../../routes/routes";
-import SOPAS  from "../../routes/SOPAS.routes"
+import SOPAS from "../../routes/SOPAS.routes"
 import KONTRONIX from "../../routes/KONTRONIX.routes"
-import { NavLink,  useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
@@ -13,24 +13,25 @@ import { RiMenu2Line } from "react-icons/ri";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { useGetLoggedInUserQuery } from "../../redux/api/api";
+import { isSubscriptionEnd } from "../../utils/dateModifyer";
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const [cookie, _, removeCookie] = useCookies();
-  const { allowedroutes, isSuper,id } = useSelector((state: any) => state.auth);
+  const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
   const [checkMenu, setCheckMenu] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState<{ [key: string]: boolean }>(
     {}
   );
 
-    const [cookies] = useCookies();
+  const [cookies] = useCookies();
 
   const {
-      data: user,
-      isLoading
-    } = useGetLoggedInUserQuery(
-      cookies.access_token ? id : ""
-    );
+    data: user,
+    isLoading
+  } = useGetLoggedInUserQuery(
+    cookies.access_token ? id : ""
+  );
 
 
   const handleCloseMenu = () => {
@@ -57,7 +58,7 @@ const Navigation: React.FC = () => {
 
 
 
-  
+
 
   const handleRoutes = (path) => {
     switch (path) {
@@ -66,7 +67,9 @@ const Navigation: React.FC = () => {
       case "SOPAS":
         return SOPAS;
       case "KONTRONIX":
-        return KONTRONIX
+        return  KONTRONIX;
+      case "Free Trial":
+        return RTPAS;
       default:
         return [];
 
@@ -79,7 +82,7 @@ const Navigation: React.FC = () => {
 
 
 
-  if(isLoading){
+  if (isLoading) {
     return "loading ./......"
   }
 
@@ -145,9 +148,9 @@ const Navigation: React.FC = () => {
                       className={`flex items-center justify-between  px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 group
                         // ${
                         //   isAllowed
-                         //  ? 
-                           "hover:bg-blue-50 hover:text-blue-700 text-gray-700"
-                          // : "text-gray-400 cursor-not-allowed"
+                        //  ? 
+                        "hover:bg-blue-50 hover:text-blue-700 text-gray-700"
+                        // : "text-gray-400 cursor-not-allowed"
                         }`
                       }
                       onClick={() =>
@@ -160,16 +163,16 @@ const Navigation: React.FC = () => {
                         <span className="font-medium ">{route.name}</span>
                       </div>
                       {
-                      //isAllowed && 
-                      (
-                        <span className="transition-transform duration-200">
-                          {openSubMenus[route.path] ? (
-                            <FaAngleUp className="text-sm" />
-                          ) : (
-                            <FaAngleDown className="text-sm" />
-                          )}
-                        </span>
-                      )}
+                        //isAllowed && 
+                        (
+                          <span className="transition-transform duration-200">
+                            {openSubMenus[route.path] ? (
+                              <FaAngleUp className="text-sm" />
+                            ) : (
+                              <FaAngleDown className="text-sm" />
+                            )}
+                          </span>
+                        )}
                     </li>
                     {openSubMenus[route.path] && (
                       <div className="ml-4 mt-2 space-y-1">
@@ -182,17 +185,17 @@ const Navigation: React.FC = () => {
                               `block px-4 py-2 rounded-lg transition-all duration-200 ${isActive
                                 ? "bg-blue-100 text-blue-700 border-l-4 border-blue-500"
                                 //: isAllowed
-                                  //? 
-                                  :"text-gray-600 hover:bg-gray-50 hover:text-gray-800"
-                                 // : "text-gray-400 cursor-not-allowed"
+                                //? 
+                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                              // : "text-gray-400 cursor-not-allowed"
                               }`
                             }
-                            // style={{
-                            //   pointerEvents:
-                            //    //isAllowed ? 
-                            //    "auto" 
-                            //    //: "none",
-                            // }}
+                          // style={{
+                          //   pointerEvents:
+                          //    //isAllowed ? 
+                          //    "auto" 
+                          //    //: "none",
+                          // }}
                           >
                             <div className="flex items-center gap-3">
                               <span className="text-lg">{sublink.icon}</span>
@@ -215,18 +218,18 @@ const Navigation: React.FC = () => {
                     className={({ isActive }) =>
                       `block px-4 py-3 rounded-lg transition-all duration-200 ${isActive
                         ? "bg-blue-100 text-blue-700 border-l-4 border-blue-500"
-                       // : isAllowed
-                          //?
-                          : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                          //: "text-gray-400 cursor-not-allowed"
+                        // : isAllowed
+                        //?
+                        : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                      //: "text-gray-400 cursor-not-allowed"
                       }`
                     }
-                    // style={{
-                    //   pointerEvents: 
-                    //   //isAllowed ? 
-                    //    "auto" 
-                    //   // : "none",
-                    // }}
+                  // style={{
+                  //   pointerEvents: 
+                  //   //isAllowed ? 
+                  //    "auto" 
+                  //   // : "none",
+                  // }}
                   >
                     <li className="flex items-center gap-3">
                       <span className="text-xl">{route.icon}</span>
@@ -244,17 +247,17 @@ const Navigation: React.FC = () => {
                       `block px-4 py-3 rounded-lg transition-all duration-200 ${isActive
                         ? "bg-blue-100 text-blue-700 border-l-4 border-blue-500"
                         //: isAllowed
-                         // ? 
-                         :"text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                          //: "text-gray-400 cursor-not-allowed"
+                        // ? 
+                        : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                      //: "text-gray-400 cursor-not-allowed"
                       }`
                     }
-                    // style={{
-                    //   pointerEvents: 
-                    //   //isAllowed ?
-                    //    "auto"
-                    //    // : "none",
-                    // }}
+                  // style={{
+                  //   pointerEvents: 
+                  //   //isAllowed ?
+                  //    "auto"
+                  //    // : "none",
+                  // }}
                   >
                     <li className="flex items-center gap-3">
                       <span className="text-xl">{route.icon}</span>
