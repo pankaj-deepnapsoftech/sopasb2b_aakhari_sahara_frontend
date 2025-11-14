@@ -16,7 +16,7 @@ import LandingLayout from "./landing/LandingLayout";
 import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
-import SessionExpired from "./pages/SessionExpired";
+import SessionExpired from "./pages/SubscriptionEnd";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
 import SubscriptionExpired from "./pages/SessionExpired";
 import { isSubscriptionEnd } from "./utils/dateModifyer";
@@ -57,7 +57,7 @@ const App: React.FC = () => {
   useEffect(()=>{
     if(user){
        if(isSubscriptionEnd(user?.user[0]?.subscription_end)){
-        Navigate("")
+        Navigate("subscription-end")
        }
     }
   },[user]) 
@@ -76,7 +76,7 @@ const App: React.FC = () => {
 
             <Route path="/login" element={<Login />} />
 
-            <Route path="/session" element={<SubscriptionExpired />} />
+            <Route path="/subscription-end" element={<SubscriptionExpired />} />
 
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}
