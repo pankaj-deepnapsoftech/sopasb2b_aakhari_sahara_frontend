@@ -121,6 +121,7 @@ export default function PricingSection() {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
+      window.location.href = "/"
     } catch (e) {
       alert('Unable to start payment: ' + (e.message || e));
     }

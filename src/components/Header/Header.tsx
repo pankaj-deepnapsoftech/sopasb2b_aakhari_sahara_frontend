@@ -133,14 +133,14 @@ if (isLoading) {
          {parseInt(LeftSubscriptionDays(user?.user[0]?.subscription_end)) <= 7 && <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
             {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end) == '0' ? "Today" : LeftSubscriptionDays(user?.user[0]?.subscription_end) + " days"}
           </p>}
-
-         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && user?.user[0]?.subscription_count > 1 ?  <button
+          
+         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && user?.user[0]?.subscription_count >= 2 ?  <button
             className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
             onClick={() => navigate("/pricing-modal?action=renew")}
           >
             Renew
           </button>
-          : 
+          : user?.user[0]?.subscription_count < 1 &&
 
           <button
             className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
