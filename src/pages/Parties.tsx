@@ -223,7 +223,7 @@ const Parties = () => {
                   setshowData(!showData);
                   setEditTable(null);
                 }}
-                className="flex items-center gap-1 px-3 py-2 text-white font-medium rounded-md transition-all duration-150 hover:shadow focus:outline-none focus:ring-2"
+                className="flex items-center gap-1 px-3 py-2 text-white font-small rounded-md transition-all duration-150 hover:shadow focus:outline-none focus:ring-2"
                 style={{
                   backgroundColor: colors.primary[600],
                 }}

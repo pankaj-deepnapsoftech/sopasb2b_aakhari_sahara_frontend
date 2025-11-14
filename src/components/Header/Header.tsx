@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useSelector } from "react-redux";
 // import logo from "../../assets/images/logo/logo.png";
 import { Avatar } from "@chakra-ui/react";
@@ -9,6 +10,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import UserDetailsMenu from "../../ui/UserDetailsMenu";
 import { CheckSubscriptionIsEnd, LeftSubscriptionDays } from "../../utils/dateModifyer";
+import { motion } from "motion/react"
 import { useGetLoggedInUserQuery } from "../../redux/api/api";
 // import { MdOutlineDashboardCustomize } from "react-icons/md";
 
@@ -96,9 +98,24 @@ const Header: React.FC = () => {
     }
   };
 
-  if(isLoading){
-    return "loading ./......"
-  }
+if (isLoading) {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center gap-3">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+        ></motion.div>
+
+        <p className="text-gray-600 font-medium tracking-wide">
+          Loading, please wait...
+        </p>
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className="relative bg-white border-b border-gray-200 shadow-sm">
       <div className="flex justify-between items-center h-16 px-4 lg:px-6">

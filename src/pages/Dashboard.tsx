@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import {
@@ -54,6 +55,7 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
+import { motion } from "motion/react"
 import RoleModals from "../components/RoleModals";
 import InventoryDashboard from "./InventoryDashboard"; // Import the InventoryDashboard component (adjust path as needed)
 import ProductionDashboard from "./ProductionDashboard";
@@ -61,6 +63,7 @@ import DesignerDashboard from "./DesignerDashboard";
 import AccountantDashboard from "./AccountantDashboard";
 import SalesDashboard from "./SalesDashboard";
 import DispatchDashboard from "./DispatchDashboard";
+
 
 const Analytics: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
@@ -1264,14 +1267,22 @@ const Analytics: React.FC = () => {
 
   // Conditional rendering based on user details
   if (isLoadingUser) {
-    return (
-      <Box p={8} textAlign="center">
-        <Text fontSize="lg" color="gray.600">
-          Loading dashboard...
-        </Text>
-      </Box>
-    );
-  }
+     return (
+       <div className="flex items-center justify-center min-h-[60vh]">
+         <div className="flex flex-col items-center gap-3">
+           <motion.div
+             animate={{ rotate: 360 }}
+             transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+             className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+           ></motion.div>
+ 
+           <p className="text-gray-600 font-medium tracking-wide">
+             Loading, please wait...
+           </p>
+         </div>
+       </div>
+     );
+   }
 
   //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Condition for admin approval>>>>>>>>>>>>>>>>>>>>>>>
 

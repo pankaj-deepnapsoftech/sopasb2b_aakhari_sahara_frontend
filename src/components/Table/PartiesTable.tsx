@@ -340,11 +340,11 @@ const PartiesTable = ({
                   className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap"
                   style={{
                     color: colors.table.headerText,
-                    position: "sticky",
-                    top: 0,
-                    left: 0,
-                    zIndex: 3,
-                    backgroundColor: colors.table.header,
+                    // position: "sticky",
+                    // top: 0,
+                    // left: 0,
+                    // zIndex: 3,
+                    // backgroundColor: colors.table.header,
                   }}
                 >
                   Consignee Name
@@ -438,6 +438,7 @@ const PartiesTable = ({
             </thead>
             <tbody>
               {filteredParties.map((party, index) => (
+                
                 <tr
                   key={party._id || index}
                   className="transition-colors hover:shadow-sm"
@@ -458,6 +459,7 @@ const PartiesTable = ({
                         : colors.table.stripe;
                   }}
                 >
+                  {console.log("partyyyyyy =======>>>>>>", party)}
                   <td
                     className="px-4 py-3 text-sm whitespace-nowrap"
                     style={{ color: colors.text.secondary }}
@@ -488,17 +490,18 @@ const PartiesTable = ({
                       : "N/A"}
                   </td>
                   <td
-                    className="px-4 py-3 text-sm font-medium whitespace-nowrap truncate max-w-xs"
+                    className="px-4 py-3 text-sm whitespace-nowrap"
                     style={{
-                      color: colors.text.primary,
-                      position: "sticky",
-                      left: 0,
-                      backgroundColor:
-                        index % 2 === 0
-                          ? colors.background.card
-                          : colors.table.stripe,
-                      zIndex: 1,
+                      color: colors.text.secondary,
+                      // position: "sticky",
+                      // left: 0,
+                      // backgroundColor:
+                      //   index % 2 === 0
+                      //     ? colors.background.card
+                      //     : colors.table.stripe,
+                      // zIndex: 1,
                     }}
+                
                     title={party?.consignee_name?.[0] || "N/A"}
                   >
                     {party?.consignee_name?.[0] || "N/A"}
