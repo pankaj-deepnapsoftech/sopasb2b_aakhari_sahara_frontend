@@ -1,5 +1,6 @@
 // @ts-nocheck
 export const LeftSubscriptionDays = (date) => {
+    console.log("this is date ====>>>>",date)
     const endDate = new Date(date);
     const now = new Date();
 
@@ -9,6 +10,6 @@ export const LeftSubscriptionDays = (date) => {
     // convert to days
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
-    return Math.floor(diffDays); 
+    return diffDays.toFixed(); 
 
 }

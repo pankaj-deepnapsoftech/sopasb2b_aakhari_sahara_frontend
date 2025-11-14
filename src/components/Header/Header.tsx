@@ -10,17 +10,24 @@ import { useNavigate } from "react-router-dom";
 import UserDetailsMenu from "../../ui/UserDetailsMenu";
 import { colors } from "../../theme/colors";
 import { LeftSubscriptionDays } from "../../utils/dateModifyer";
+import { useGetLoggedInUserQuery } from "../../redux/api/api";
 // import { MdOutlineDashboardCustomize } from "react-icons/md";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [cookie, _, removeCookie] = useCookies();
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
-  const { firstname, lastname, email } = useSelector(
+  const { firstname, lastname, email,id } = useSelector(
     (state: any) => state.auth
   );
-
-  const {subscription_end} = useSelector((state:any) => state.Subscription.plan);
+  const [cookies] = useCookies();
+  
+  const {
+    data: user,
+    isLoading
+  } = useGetLoggedInUserQuery(
+    cookies.access_token ? id : ""
+  );
 
 
   
@@ -89,6 +96,10 @@ const Header: React.FC = () => {
       toast.error(error.message || "Something went wrong");
     }
   };
+
+  if(isLoading){
+    return "loading ./......"
+  }
   return (
     <div className="relative bg-white border-b border-gray-200 shadow-sm">
       <div className="flex justify-between items-center h-16 px-4 lg:px-6">
@@ -104,7 +115,7 @@ const Header: React.FC = () => {
 
         <div className="flex items-center gap-4 ml-auto">
           <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            Free Trial Ends in: {LeftSubscriptionDays(subscription_end)} days
+            Free Trial Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end)} days
           </p>
 
           <button

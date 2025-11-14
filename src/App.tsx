@@ -17,20 +17,12 @@ import PublicRoutes from "./routes/Public.routes"
 import PricingSection from "./pages/PricingModel";
 import { useCookies } from "react-cookie";
 import SessionExpired from "./pages/SessionExpired";
-import { useGetLoggedInUserQuery } from "./redux/api/api";
-import { setSubscriptionData } from "./redux/reducers/subscription";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch();
+
   const [cookies] = useCookies();
 
-  const {
-    data: user,
-    isLoading
-  } = useGetLoggedInUserQuery(
-    cookies.access_token ? id : skipToken
-  );
 
 
 
@@ -50,15 +42,7 @@ const App: React.FC = () => {
   }
 
 
-  useEffect(() => {
-    if (user) {
-      dispatch(setSubscriptionData(user?.user[0]))
-    }
-  }, [dispatch, user]);
 
-  if (isLoading) {
-    return "loading....................."
-  }
 
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
