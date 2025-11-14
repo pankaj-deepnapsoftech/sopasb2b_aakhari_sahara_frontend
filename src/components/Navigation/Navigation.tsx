@@ -82,7 +82,7 @@ const Navigation: React.FC = () => {
 
 
 
-  if (isLoading) {
+  if (isLoading ) {
     return "loading ./......"
   }
 
