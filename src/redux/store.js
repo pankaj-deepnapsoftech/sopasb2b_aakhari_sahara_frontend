@@ -15,10 +15,12 @@ import {
 } from "./api/api";
 import authSlice from "./reducers/authSlice";
 import drawersSlice from "./reducers/drawersSlice";
+import { SubscriptionSlice } from "./reducers/subscription";
 
 const store = configureStore({
   reducer: {
     [api.reducerPath]:api.reducer,
+    [SubscriptionSlice.name]:SubscriptionSlice.reducer,
     [authSlice.name]: authSlice.reducer,
     [drawersSlice.name]: drawersSlice.reducer,
     [processApi.reducerPath]: processApi.reducer, // ✅ ADD THIS

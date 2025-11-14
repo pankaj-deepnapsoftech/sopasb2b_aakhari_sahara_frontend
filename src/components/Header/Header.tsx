@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import UserDetailsMenu from "../../ui/UserDetailsMenu";
 import { colors } from "../../theme/colors";
+import { LeftSubscriptionDays } from "../../utils/dateModifyer";
 // import { MdOutlineDashboardCustomize } from "react-icons/md";
 
 const Header: React.FC = () => {
@@ -18,6 +19,11 @@ const Header: React.FC = () => {
   const { firstname, lastname, email } = useSelector(
     (state: any) => state.auth
   );
+
+  const {subscription_end} = useSelector((state:any) => state.Subscription.plan);
+
+
+  
 
   const [greeting, setGreeting] = useState<string>("Good Afternoon");
   const [date, setDate] = useState<string>(
@@ -98,7 +104,7 @@ const Header: React.FC = () => {
 
         <div className="flex items-center gap-4 ml-auto">
           <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            Free Trial Ends in:
+            Free Trial Ends in: {LeftSubscriptionDays(subscription_end)} days
           </p>
 
           <button
