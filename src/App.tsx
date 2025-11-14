@@ -8,9 +8,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Register from "./pages/Register";
 import Layout from "./pages/Layout";
 import RTPAS from "./routes/routes";
-import SOPAS from "./routes/SOPAS.routes";
-import KONTRONIX from "./routes/KONTRONIX.routes";
-import { useDispatch, useSelector } from "react-redux";
+import SOPAS from "./routes/SOPAS.routes"
+import KONTRONIX from "./routes/KONTRONIX.routes"
+import {  useSelector } from "react-redux";
 import NotFound from "./pages/NotFound";
 import LandingLayout from "./landing/LandingLayout";
 import PublicRoutes from "./routes/Public.routes";
@@ -26,6 +26,7 @@ const App: React.FC = () => {
     (state: any) => state.auth
   );
 
+
   const [cookies] = useCookies();
 
   const { data: user, isLoading } = useGetLoggedInUserQuery(
@@ -39,9 +40,9 @@ const App: React.FC = () => {
       case "SOPAS":
         return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : SOPAS;
       case "KONTRONIX":
-        return isSubscriptionEnd(user?.user[0]?.subscription_end)
-          ? []
-          : KONTRONIX;
+        return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : KONTRONIX;
+      case "Free Trial":
+        return isSubscriptionEnd(user?.user[0]?.subscription_end) ? [] : RTPAS;
       default:
         return [];
     }
@@ -51,7 +52,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (user) {
       if (isSubscriptionEnd(user?.user[0]?.subscription_end)) {
-        Navigate("subscription-end");
+          window.location.href  = "/subscription-end"
       }
     }
   }, [user]);

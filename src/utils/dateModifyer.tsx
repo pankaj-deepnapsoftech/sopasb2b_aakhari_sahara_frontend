@@ -1,6 +1,5 @@
 // @ts-nocheck
 export const LeftSubscriptionDays = (date) => {
-    console.log("this is date ====>>>>", date)
     const endDate = new Date(date);
     const now = new Date();
 
@@ -16,10 +15,16 @@ export const LeftSubscriptionDays = (date) => {
 
 export const CheckSubscriptionIsEnd = (date) => {
     const endDate = new Date(date);
-    const now = new Date();
+    endDate.setHours(0, 0, 0, 0);
 
-    return endDate <= now 
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() + 1);
+    yesterday.setHours(0, 0, 0, 0);
+
+    return endDate <= yesterday;
 }
+
+
 
 export const isSubscriptionEnd = (date) => {
   const endDate = new Date(date);

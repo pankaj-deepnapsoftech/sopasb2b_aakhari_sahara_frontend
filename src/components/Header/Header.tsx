@@ -130,16 +130,17 @@ if (isLoading) {
         </div>
 
         <div className="flex items-center gap-4 ml-auto">
-          <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end)} days
-          </p>
+         {parseInt(LeftSubscriptionDays(user?.user[0]?.subscription_end)) <= 7 && <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
+            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end) == '0' ? "Today" : LeftSubscriptionDays(user?.user[0]?.subscription_end) + " days"}
+          </p>}
 
-         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && <><button
+         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && user?.user[0]?.subscription_count > 1 ?  <button
             className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
             onClick={() => navigate("/pricing-modal?action=renew")}
           >
             Renew
           </button>
+          : 
 
           <button
             className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
@@ -147,7 +148,7 @@ if (isLoading) {
           >
             Upgrade
           </button>
-          </>}
+          }
 
           <button
             className="relative p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
