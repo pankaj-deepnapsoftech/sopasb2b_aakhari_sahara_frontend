@@ -731,6 +731,8 @@ const Analytics: React.FC = () => {
         const data = await response.json();
         if (data.success) {
           setFinanceData(data);
+
+          console.log(data)
         } else {
           toast({
             title: "Error",
@@ -1948,7 +1950,7 @@ const Analytics: React.FC = () => {
           <Box overflowX="auto">
             <Table size="sm">
               <Thead>
-                <Tr>
+                <Tr className="bg-gray-200">
                   <Th fontSize="xs">Role</Th>
                   <Th fontSize="xs">Description</Th>
                   <Th fontSize="xs">Created on</Th>
@@ -1970,7 +1972,7 @@ const Analytics: React.FC = () => {
                     : role.lastUpdated || "";
 
                   return (
-                    <Tr key={index}>
+                    <Tr key={index} className="bg-gray-100">
                       <Td fontSize="xs">{role.role}</Td>
                       <Td fontSize="xs">{role.description}</Td>
                       <Td fontSize="xs">{createdOn}</Td>
@@ -2011,7 +2013,7 @@ const Analytics: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Accounts */}
+        {/* Accounts Chart*/}
         <Box
           bg="white"
           p={{ base: 4, md: 6 }}
@@ -2112,6 +2114,7 @@ const Analytics: React.FC = () => {
                       dataKey="value"
                     >
                       {accountsData.map((entry, index) => (
+                     
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
@@ -2144,8 +2147,11 @@ const Analytics: React.FC = () => {
       </Flex>
 
       {/* Additional Sections - Side by Side */}
+
+{/*       
       <Flex direction="row" gap={{ base: 4, lg: 6 }} mb={6} flexWrap="wrap">
-        {/* User Roles */}
+
+
         <Box
           bg="white"
           p={{ base: 4, md: 6 }}
@@ -2250,7 +2256,8 @@ const Analytics: React.FC = () => {
           </Box>
         </Box>
 
-        {/* Accounts */}
+  
+
         <Box
           bg="white"
           p={{ base: 4, md: 6 }}
@@ -2380,7 +2387,7 @@ const Analytics: React.FC = () => {
             ))}
           </VStack>
         </Box>
-      </Flex>
+      </Flex> */}
 
       {/* Stats Section - BOM and Employees */}
       {/* <Flex 
