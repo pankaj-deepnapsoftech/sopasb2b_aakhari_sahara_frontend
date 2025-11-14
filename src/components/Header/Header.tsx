@@ -20,14 +20,17 @@ const Header: React.FC = () => {
   );
 
   const [greeting, setGreeting] = useState<string>("Good Afternoon");
-  const [date, setDate] = useState<string>(new Date().toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    day: 'numeric', 
-    month: 'long', 
-    year: 'numeric' 
-  }));
+  const [date, setDate] = useState<string>(
+    new Date().toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  );
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8096/api/';
+  const backendUrl =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8096/api/";
 
   // Fetch welcome data from API
   useEffect(() => {
@@ -35,21 +38,21 @@ const Header: React.FC = () => {
       try {
         // Get the access token from cookies
         const accessToken = cookie.access_token;
-        
+
         if (!accessToken) {
           return;
         }
 
         const response = await fetch(`${backendUrl}dashboard/welcome`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
           setGreeting(data.greeting);
           setDate(data.date);
@@ -57,12 +60,14 @@ const Header: React.FC = () => {
       } catch (error) {
         // Fallback to default values if API fails
         setGreeting("Good Afternoon");
-        setDate(new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          day: 'numeric', 
-          month: 'long', 
-          year: 'numeric' 
-        }));
+        setDate(
+          new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        );
       }
     };
 
@@ -81,7 +86,6 @@ const Header: React.FC = () => {
   return (
     <div className="relative bg-white border-b border-gray-200 shadow-sm">
       <div className="flex justify-between items-center h-16 px-4 lg:px-6">
-      
         <div className=" flex-col justify-center hidden md:flex ml-20 lg:ml-0">
           <h1 className="text-2xl font-semibold text-gray-800">
             {greeting},
@@ -92,21 +96,25 @@ const Header: React.FC = () => {
           <i className="text-sm text-gray-500"> "{date}"</i>
         </div>
 
-       
         <div className="flex items-center gap-4 ml-auto">
+          <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
+            Free Trial Ends in:
+          </p>
 
-        <button className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
-          onClick={() => navigate('/pricing-modal?action=renew')}
-        >
-          Renew
-        </button>
+          <button
+            className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
+            onClick={() => navigate("/pricing-modal?action=renew")}
+          >
+            Renew
+          </button>
 
-        <button className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
-          onClick={() => navigate('/pricing-modal')}
-        >
-          Upgrade
-        </button>
-      
+          <button
+            className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
+            onClick={() => navigate("/pricing-modal")}
+          >
+            Upgrade
+          </button>
+
           <button
             className="relative p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             aria-label="Notifications"
@@ -115,7 +123,6 @@ const Header: React.FC = () => {
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
 
-     
           <div className="relative">
             <Avatar
               cursor="pointer"
@@ -143,7 +150,6 @@ const Header: React.FC = () => {
         </div>
       </div>
     </div>
-
   );
 };
 
