@@ -100,19 +100,20 @@ const Header: React.FC = () => {
 
 if (isLoading) {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="flex flex-col items-center gap-3">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
-        ></motion.div>
+    <></>
+    // <div className="flex items-center justify-center min-h-[60vh]">
+    //   <div className="flex flex-col items-center gap-3">
+    //     <motion.div
+    //       animate={{ rotate: 360 }}
+    //       transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+    //       className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+    //     ></motion.div>
 
-        <p className="text-gray-600 font-medium tracking-wide">
-          Loading, please wait...
-        </p>
-      </div>
-    </div>
+    //     <p className="text-gray-600 font-medium tracking-wide">
+    //       Loading, please wait...
+    //     </p>
+    //   </div>
+    // </div>
   );
 }
 
@@ -131,7 +132,7 @@ if (isLoading) {
 
         <div className="flex items-center gap-4 ml-auto">
          {parseInt(LeftSubscriptionDays(user?.user[0]?.subscription_end)) <= 7 && <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end) == '0' ? "Today" : LeftSubscriptionDays(user?.user[0]?.subscription_end) + " days"}
+            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end) == '0' ? "Today"  :LeftSubscriptionDays(user?.user[0]?.subscription_end) == '1' ? "Tomorrow" : LeftSubscriptionDays(user?.user[0]?.subscription_end) + " days"}
           </p>}
           
          {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && user?.user[0]?.subscription_count >= 2 ?  <button

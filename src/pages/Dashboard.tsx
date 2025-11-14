@@ -1270,19 +1270,20 @@ const Analytics: React.FC = () => {
   // Conditional rendering based on user details
   if (isLoadingUser) {
      return (
-       <div className="flex items-center justify-center min-h-[60vh]">
-         <div className="flex flex-col items-center gap-3">
-           <motion.div
-             animate={{ rotate: 360 }}
-             transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-             className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
-           ></motion.div>
+      <></>
+      //  <div className="flex items-center justify-center min-h-[60vh]">
+      //    <div className="flex flex-col items-center gap-3">
+      //      <motion.div
+      //        animate={{ rotate: 360 }}
+      //        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      //        className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+      //      ></motion.div>
  
-           <p className="text-gray-600 font-medium tracking-wide">
-             Loading, please wait...
-           </p>
-         </div>
-       </div>
+      //      <p className="text-gray-600 font-medium tracking-wide">
+      //        Loading, please wait...
+      //      </p>
+      //    </div>
+      //  </div>
      );
    }
 
