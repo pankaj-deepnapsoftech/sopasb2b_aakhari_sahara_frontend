@@ -160,23 +160,23 @@ const Invoice: React.FC = () => {
     setFilteredData(results);
   }, [searchKey]);
 
-  if (!isAllowed) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div
-            className="text-lg font-semibold mb-2"
-            style={{ color: colors.error[600] }}
-          >
-            Access Denied
-          </div>
-          <div style={{ color: colors.text.secondary }}>
-            You are not allowed to access this route.
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (!isAllowed) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <div className="text-center">
+  //         <div
+  //           className="text-lg font-semibold mb-2"
+  //           style={{ color: colors.error[600] }}
+  //         >
+  //           Access Denied
+  //         </div>
+  //         <div style={{ color: colors.text.secondary }}>
+  //           You are not allowed to access this route.
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   
 
   return (

@@ -1273,35 +1273,37 @@ const Analytics: React.FC = () => {
     );
   }
 
-  if (userDetails?.isSuper) {
-    // Render Analytics (admin) dashboard (falls through to render below)
-  } else if (userDetails?.role?.role?.toLowerCase() === "inventory") {
-    // Render InventoryDashboard for inventory role
-    return <InventoryDashboard />;
-  } else if (userDetails?.role?.role?.toLowerCase() === "production") {
-    // Render ProductionDashboard for production role
-    return <ProductionDashboard />;
-  } else if (userDetails?.role?.role?.toLowerCase() === "designer") {
-    // Render DesignerDashboard for designer role
-    return <DesignerDashboard />;
-  } else if (userDetails?.role?.role?.toLowerCase() === "accountant") {
-    // Render AccountantDashboard for accountant role
-    return <AccountantDashboard />;
-  } else if (userDetails?.role?.role?.toLowerCase() === "sales") {
-    // Render AccountantDashboard for accountant role
-    return <SalesDashboard />;
-  } else if (userDetails?.role?.role?.toLowerCase() === "dispatcher") {
-    return <DispatchDashboard />;
-  } else {
-    // Default or other roles - for now, render a message; extend as needed
-    return (
-      <Box p={8} textAlign="center">
-        <Text fontSize="lg" color="gray.600">
-          No dashboard available for your role. Contact admin.
-        </Text>
-      </Box>
-    );
-  }
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Condition for admin approval>>>>>>>>>>>>>>>>>>>>>>>
+
+  // if (userDetails?.isSuper) {
+  //   // Render Analytics (admin) dashboard (falls through to render below)
+  // } else if (userDetails?.role?.role?.toLowerCase() === "inventory") {
+  //   // Render InventoryDashboard for inventory role
+  //   return <InventoryDashboard />;
+  // } else if (userDetails?.role?.role?.toLowerCase() === "production") {
+  //   // Render ProductionDashboard for production role
+  //   return <ProductionDashboard />;
+  // } else if (userDetails?.role?.role?.toLowerCase() === "designer") {
+  //   // Render DesignerDashboard for designer role
+  //   return <DesignerDashboard />;
+  // } else if (userDetails?.role?.role?.toLowerCase() === "accountant") {
+  //   // Render AccountantDashboard for accountant role
+  //   return <AccountantDashboard />;
+  // } else if (userDetails?.role?.role?.toLowerCase() === "sales") {
+  //   // Render AccountantDashboard for accountant role
+  //   return <SalesDashboard />;
+  // } else if (userDetails?.role?.role?.toLowerCase() === "dispatcher") {
+  //   return <DispatchDashboard />;
+  // } else {
+  //   // Default or other roles - for now, render a message; extend as needed
+  //   return (
+  //     <Box p={8} textAlign="center">
+  //       <Text fontSize="lg" color="gray.600">
+  //         No dashboard available for your role. Contact admin.
+  //       </Text>
+  //     </Box>
+  //   );
+  // }
 
   // Render admin dashboard content (Analytics)
   return (

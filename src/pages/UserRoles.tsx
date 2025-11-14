@@ -131,13 +131,13 @@ const UserRole: React.FC = () => {
     setFilteredRoles(results);
   }, [searchKey]);
 
-  if (!isAllowed) {
-    return (
-      <div className="text-center text-red-500">
-        You are not allowed to access this route.
-      </div>
-    );
-  }
+  // if (!isAllowed) {
+  //   return (
+  //     <div className="text-center text-red-500">
+  //       You are not allowed to access this route.
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 lg:p-3">
