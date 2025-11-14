@@ -133,9 +133,9 @@ const Navigation: React.FC = () => {
                       className={`flex items-center justify-between  px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 group
                         // ${
                         //   isAllowed
-                        //   ? "hover:bg-blue-50 hover:text-blue-700 text-gray-700"
-                          // :
-                           "text-gray-400 cursor-not-allowed"
+                         //  ? 
+                           "hover:bg-blue-50 hover:text-blue-700 text-gray-700"
+                          // : "text-gray-400 cursor-not-allowed"
                         }`
                       }
                       onClick={() =>
