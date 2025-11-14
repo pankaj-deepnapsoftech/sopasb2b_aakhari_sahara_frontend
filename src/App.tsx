@@ -67,7 +67,7 @@ const App: React.FC = () => {
 
             <Route path="/login" element={<Login />} />
 
-            <Route path="/session" element={<SubscriptionExpired />} />
+            <Route path="/subscription-end" element={<SubscriptionExpired />} />
 
             <Route path="/pricing-modal" element={<PricingSection />} />
             {/* <Route path="/register" element={<Register />} /> */}
