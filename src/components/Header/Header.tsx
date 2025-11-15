@@ -141,7 +141,7 @@ if (isLoading) {
           >
             Renew
           </button>
-          : user?.user[0]?.subscription_count < 1 &&
+          : user?.user[0]?.subscription_count <= 1 &&
 
           <button
             className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
