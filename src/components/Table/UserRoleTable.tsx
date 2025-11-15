@@ -202,7 +202,7 @@ const UserRoleTable: React.FC<UserRoleTableProps> = ({
                 <Thead
                   bg={colors.table.header}
                   style={{
-                    position: "sticky",
+                    // position: "sticky",
                     top: 0,
                     zIndex: 1,
                   }}
@@ -227,7 +227,7 @@ const UserRoleTable: React.FC<UserRoleTableProps> = ({
                           style={{
                             backgroundColor: colors.table.header,
                             ...(column.id === "role" && {
-                              position: "sticky",
+                              // position: "sticky",
                               left: 0,
                               zIndex: 2,
                             }),
@@ -289,7 +289,7 @@ const UserRoleTable: React.FC<UserRoleTableProps> = ({
                             style={{
                               // Make Role column sticky on horizontal scroll
                               ...(cell.column.id === "role" && {
-                                position: "sticky",
+                                // position: "sticky",
                                 left: 0,
                                 zIndex: 1,
                                 backgroundColor: dynamicBg(index),

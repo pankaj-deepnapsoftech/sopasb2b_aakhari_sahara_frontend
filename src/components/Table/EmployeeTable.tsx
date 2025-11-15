@@ -196,7 +196,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                   size="md"
                   minWidth="800px"
                 ><Thead
-                  position="sticky"
+                  // position="sticky"
                   top={0}
                   zIndex={2}
                   bg={colors.table.header}
@@ -215,7 +215,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                             {...column.getHeaderProps(column.getSortByToggleProps())}
                             fontSize="14px"
                             fontWeight="600"
-                            position="sticky"
+                            // position="sticky"
                             top={0}
                             left={column.id === "first_name" ? 0 : undefined}
                             zIndex={column.id === "first_name" ? 4 : 3}
@@ -271,7 +271,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                               key={index}
                               {...cell.getCellProps()}
                               fontSize="14px"
-                              position={cell.column.id === "first_name" ? "sticky" : "static"}
+                              position={cell.column.id === "first_name" ? "" : "static"}
                               left={cell.column.id === "first_name" ? 0 : undefined}
                               zIndex={cell.column.id === "first_name" ? 1 : undefined}
                               bg={cell.column.id === "first_name" ? dynamicBg(row.index) : undefined}
