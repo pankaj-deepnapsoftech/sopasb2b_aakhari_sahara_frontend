@@ -17,7 +17,7 @@ import BOM from "../pages/BOM";
 import { VscServerProcess } from "react-icons/vsc";
 import Process from "../pages/Process";
 import ProductionStatus from "../pages/ProductionStatus";
-import { TbTruckDelivery } from "react-icons/tb";
+import { TbLockAccess, TbTruckDelivery } from "react-icons/tb";
 import Dispatch from "../pages/Dispatch";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -29,16 +29,42 @@ import Approvals from "../pages/Approvals";
 import { CgProfile } from "react-icons/cg";
 import UserProfile from "../pages/Userprofile";
 import Dashboard from "../pages/Dashboard";
+import { FaPeopleGroup } from "react-icons/fa6";
+import Employees from "../pages/Emloyees";
+import UserRole from "../pages/UserRoles";
+import { IoIosPeople } from "react-icons/io";
+import Parties from "../pages/Parties";
 
 export const routes = [
-     {
+    {
         name: "Dashboard",
         icon: <MdOutlineSpeed />,
         path: "",
         element: <Dashboard />,
         isSublink: false,
     },
-        {
+    {
+        name: "Employees",
+        icon: <FaPeopleGroup />,
+        path: "employee",
+        element: <Employees />,
+        isSublink: false,
+    },
+    {
+        name: "User Roles",
+        icon: <TbLockAccess />,
+        path: "role",
+        element: <UserRole />,
+        isSublink: false,
+    },
+    {
+        name: "Merchant",
+        icon: <IoIosPeople />,
+        path: "merchant",
+        element: <Parties />,
+        isSublink: false,
+    },
+    {
         name: "Inventory",
         icon: <MdOutlineShoppingCart />,
         path: "inventory",
