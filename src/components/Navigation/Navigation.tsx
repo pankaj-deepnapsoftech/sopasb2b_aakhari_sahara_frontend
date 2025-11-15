@@ -66,11 +66,10 @@ const Navigation: React.FC = () => {
       case "RTPAS":
         return RTPAS;
       case "SOPAS":
+      case "Free Trial":
         return SOPAS;
       case "KONTRONIX":
-        return  KONTRONIX;
-      case "Free Trial":
-        return RTPAS;
+        return KONTRONIX;
       default:
         return [];
 
@@ -83,7 +82,7 @@ const Navigation: React.FC = () => {
 
 
 
- if (isLoading) {
+  if (isLoading) {
     return (
       <></>
       // <div className="flex items-center justify-center min-h-[60vh]">

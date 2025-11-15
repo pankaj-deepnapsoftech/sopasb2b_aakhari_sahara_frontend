@@ -9,6 +9,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
   /* font-family: "Nunito", sans-serif; */
   /* font-family: "Open Sans", sans-serif; */
@@ -59,9 +63,7 @@ input[type="number"] {
   cursor: pointer;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 /* :root {
   --radius: 0.65rem;

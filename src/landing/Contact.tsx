@@ -6,8 +6,8 @@ import { MdEmail } from "react-icons/md";
 import { TbDeviceLandlinePhone } from "react-icons/tb";
 import { motion } from "framer-motion";
 import axios from "axios";
-import toast from "react-hot-toast";
 import contactGif from "../assets/contactUs.gif";
+import { toast } from "react-toastify";
 
 // Add custom styles for animations
 const customStyles = `

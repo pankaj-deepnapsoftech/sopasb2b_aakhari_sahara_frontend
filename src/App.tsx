@@ -65,10 +65,10 @@ const App: React.FC = () => {
 
     switch (plan) {
       case "RTPAS":
-      case "Free Trial":
         return RTPAS;
 
       case "SOPAS":
+      case "Free Trial":
         return SOPAS;
 
       case "KONTRONIX":
@@ -118,61 +118,61 @@ const App: React.FC = () => {
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
       <ToastContainer />
-        <Routes>
-          {/* Public Routes (no token) */}
-          {!cookies.access_token && (
-            <Route element={<LandingLayout />}>
-              {PublicRoutes.map((route, index) => (
-                <Route key={index} path={route.path} element={route.element} />
-              ))}
-            </Route>
-          )}
+      <Routes>
+        {/* Public Routes (no token) */}
+        {!cookies.access_token && (
+          <Route element={<LandingLayout />}>
+            {PublicRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Route>
+        )}
 
-          {/* Auth pages */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/subscription-end" element={<SessionExpired />} />
-          <Route path="/pricing-modal" element={<PricingSection />} />
+        {/* Auth pages */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/subscription-end" element={<SessionExpired />} />
+        <Route path="/pricing-modal" element={<PricingSection />} />
 
-          {/* Protected Routes */}
-          {cookies.access_token && (
-            <Route path="/" element={<Layout />}>
-              {handleRoutes(user?.user?.[0]?.plan).map((route, ind) => {
-                const isAllowed =
-                  isSuper ||
-                  allowedroutes.includes(route.path.replaceAll("/", ""));
+        {/* Protected Routes */}
+        {cookies.access_token && (
+          <Route path="/" element={<Layout />}>
+            {handleRoutes(user?.user?.[0]?.plan).map((route, ind) => {
+              const isAllowed =
+                isSuper ||
+                allowedroutes.includes(route.path.replaceAll("/", ""));
 
-                // Uncomment if you want to restrict unauthorized pages:
-                // if (!isAllowed) return null;
+              // Uncomment if you want to restrict unauthorized pages:
+              // if (!isAllowed) return null;
 
-                if (route.isSublink) {
-                  return (
-                    <Route key={ind} path={route.path} element={route.element}>
-                      {route.sublink?.map((sublink, index) => (
-                        <Route
-                          key={index}
-                          path={sublink.path}
-                          element={sublink.element}
-                        />
-                      ))}
-                    </Route>
-                  );
-                }
-
+              if (route.isSublink) {
                 return (
-                  <Route
-                    key={ind}
-                    index={route.name === "Dashboard"}
-                    path={route.path}
-                    element={route.element}
-                  />
+                  <Route key={ind} path={route.path} element={route.element}>
+                    {route.sublink?.map((sublink, index) => (
+                      <Route
+                        key={index}
+                        path={sublink.path}
+                        element={sublink.element}
+                      />
+                    ))}
+                  </Route>
                 );
-              })}
-            </Route>
-          )}
+              }
 
-          {/* Not Found */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+              return (
+                <Route
+                  key={ind}
+                  index={route.name === "Dashboard"}
+                  path={route.path}
+                  element={route.element}
+                />
+              );
+            })}
+          </Route>
+        )}
+
+        {/* Not Found */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 };
