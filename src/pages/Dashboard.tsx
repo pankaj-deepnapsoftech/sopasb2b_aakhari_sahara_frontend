@@ -833,7 +833,6 @@ const Analytics: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("kkkkkkkkk>>>>>>>>>>>>", data)
         if (data.success) {
           setSalesDeliveredData(data);
         } else {
@@ -867,7 +866,7 @@ const Analytics: React.FC = () => {
 
   // Fetch sales-delivered data on component mount
   useEffect(() => {
-    if (userDetails?.isSuper) {
+    if (userDetails) {
       fetchSalesDeliveredData();
     }
   }, [userDetails?.isSuper]);
