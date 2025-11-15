@@ -21,7 +21,6 @@ export const CheckSubscriptionIsEnd = (date) => {
     yesterday.setDate(yesterday.getDate()+2);
     yesterday.setHours(0, 0, 0, 0);
 
-    console.log(endDate <= yesterday)
 
 
     return endDate <= yesterday;
