@@ -344,7 +344,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 <thead
                   style={{
                     backgroundColor: colors.table.header,
-                    position: "sticky",
+                   // position: "sticky",
                     top: 0,
                     zIndex: 2,
                   }}
@@ -386,7 +386,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap"
                       style={{
                         color: colors.table.headerText,
-                        position: "sticky",
+                       // position: "sticky",
                         top: 0,
                         left: 0,
                         zIndex: 3,
@@ -516,7 +516,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                           className="px-4 py-3 text-sm font-medium whitespace-nowrap max-w-xs truncate"
                           style={{
                             color: colors.text.secondary,
-                            position: "sticky",
+                           // position: "sticky",
                             left: 0,
                             zIndex: 1,
                             backgroundColor:

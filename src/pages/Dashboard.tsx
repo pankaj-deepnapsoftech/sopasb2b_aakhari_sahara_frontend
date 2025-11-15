@@ -833,6 +833,7 @@ const Analytics: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("kkkkkkkkk>>>>>>>>>>>>", data)
         if (data.success) {
           setSalesDeliveredData(data);
         } else {
@@ -1270,19 +1271,20 @@ const Analytics: React.FC = () => {
   // Conditional rendering based on user details
   if (isLoadingUser) {
      return (
-       <div className="flex items-center justify-center min-h-[60vh]">
-         <div className="flex flex-col items-center gap-3">
-           <motion.div
-             animate={{ rotate: 360 }}
-             transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-             className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
-           ></motion.div>
+      <></>
+      //  <div className="flex items-center justify-center min-h-[60vh]">
+      //    <div className="flex flex-col items-center gap-3">
+      //      <motion.div
+      //        animate={{ rotate: 360 }}
+      //        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      //        className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+      //      ></motion.div>
  
-           <p className="text-gray-600 font-medium tracking-wide">
-             Loading, please wait...
-           </p>
-         </div>
-       </div>
+      //      <p className="text-gray-600 font-medium tracking-wide">
+      //        Loading, please wait...
+      //      </p>
+      //    </div>
+      //  </div>
      );
    }
 
@@ -1665,8 +1667,8 @@ const Analytics: React.FC = () => {
             gap={{ base: 3, sm: 0 }}
           >
             <Text
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight="bold"
+              fontSize={{ base: "md", md: "md" }}
+              fontWeight="semibold"
               color="gray.800"
             >
               Production
@@ -1681,6 +1683,7 @@ const Analytics: React.FC = () => {
                 border="1px solid"
                 borderColor="gray.200"
                 borderRadius="md"
+                className="ml-5"
               >
                 <option value="Weekly">Weekly</option>
                 <option value="Monthly">Monthly</option>
@@ -1721,7 +1724,7 @@ const Analytics: React.FC = () => {
           <Box textAlign="center" mt={2}>
             <Text
               fontSize={{ base: "md", md: "lg" }}
-              fontWeight="bold"
+              fontWeight="semibold"
               color="gray.800"
             >
               Completed
@@ -1761,7 +1764,7 @@ const Analytics: React.FC = () => {
           >
             <Text
               fontSize={{ base: "md", md: "lg" }}
-              fontWeight="bold"
+              fontWeight="semibold"
               color="gray.800"
             >
               Dispatch
@@ -1776,6 +1779,7 @@ const Analytics: React.FC = () => {
                 border="1px solid"
                 borderColor="gray.200"
                 borderRadius="md"
+                className="ml-5"
               >
                 <option value="Weekly">Weekly</option>
                 <option value="Monthly">Monthly</option>
@@ -1789,7 +1793,7 @@ const Analytics: React.FC = () => {
                 <Text color="gray.500">Loading dispatch data...</Text>
               </Flex>
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" className="mt-10 mr-10">
                 <BarChart
                   data={
                     apiDispatchData.length > 0
