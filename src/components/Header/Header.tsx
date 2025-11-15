@@ -9,8 +9,11 @@ import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import UserDetailsMenu from "../../ui/UserDetailsMenu";
-import { CheckSubscriptionIsEnd, LeftSubscriptionDays } from "../../utils/dateModifyer";
-import { motion } from "motion/react"
+import {
+  CheckSubscriptionIsEnd,
+  LeftSubscriptionDays,
+} from "../../utils/dateModifyer";
+import { motion } from "motion/react";
 import { useGetLoggedInUserQuery } from "../../redux/api/api";
 // import { MdOutlineDashboardCustomize } from "react-icons/md";
 
@@ -18,20 +21,14 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const [cookie, _, removeCookie] = useCookies();
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
-  const { firstname, lastname, email,id } = useSelector(
+  const { firstname, lastname, email, id } = useSelector(
     (state: any) => state.auth
   );
   const [cookies] = useCookies();
-  
-  const {
-    data: user,
-    isLoading
-  } = useGetLoggedInUserQuery(
+
+  const { data: user, isLoading } = useGetLoggedInUserQuery(
     cookies.access_token ? id : ""
   );
-
-
-  
 
   const [greeting, setGreeting] = useState<string>("Good Afternoon");
   const [date, setDate] = useState<string>(
@@ -98,24 +95,24 @@ const Header: React.FC = () => {
     }
   };
 
-if (isLoading) {
-  return (
-    <></>
-    // <div className="flex items-center justify-center min-h-[60vh]">
-    //   <div className="flex flex-col items-center gap-3">
-    //     <motion.div
-    //       animate={{ rotate: 360 }}
-    //       transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-    //       className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
-    //     ></motion.div>
+  if (isLoading) {
+    return (
+      <></>
+      // <div className="flex items-center justify-center min-h-[60vh]">
+      //   <div className="flex flex-col items-center gap-3">
+      //     <motion.div
+      //       animate={{ rotate: 360 }}
+      //       transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      //       className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full"
+      //     ></motion.div>
 
-    //     <p className="text-gray-600 font-medium tracking-wide">
-    //       Loading, please wait...
-    //     </p>
-    //   </div>
-    // </div>
-  );
-}
+      //     <p className="text-gray-600 font-medium tracking-wide">
+      //       Loading, please wait...
+      //     </p>
+      //   </div>
+      // </div>
+    );
+  }
 
   return (
     <div className="relative bg-white border-b border-gray-200 shadow-sm">
@@ -131,25 +128,55 @@ if (isLoading) {
         </div>
 
         <div className="flex items-center gap-4 ml-auto">
-         {parseInt(LeftSubscriptionDays(user?.user[0]?.subscription_end)) <= 7 && <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
-            {user?.user[0]?.plan === "Free Trial" ? "Free Trial" : "Subscription"} Ends in: {LeftSubscriptionDays(user?.user[0]?.subscription_end) == '0' ? "Today" : LeftSubscriptionDays(user?.user[0]?.subscription_end) == '1' ? "Tomorrow" : LeftSubscriptionDays(user?.user[0]?.subscription_end) + " days"}
-          </p>}
-          
-         {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) && user?.user[0]?.subscription_count >= 2 ?  <button
-            className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
-            onClick={() => navigate("/pricing-modal?action=renew")}
-          >
-            Renew
-          </button>
-          : user?.user[0]?.subscription_count <= 1 &&
+          {parseInt(LeftSubscriptionDays(user?.user[0]?.subscription_end)) <=
+            7 && (
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500 font-semibold">
+              {/* Mobile short version */}
+              <span className="inline sm:hidden">
+                Ends in:{" "}
+                {LeftSubscriptionDays(user?.user[0]?.subscription_end) === "0"
+                  ? "Today"
+                  : LeftSubscriptionDays(user?.user[0]?.subscription_end) ===
+                    "1"
+                  ? "1d"
+                  : LeftSubscriptionDays(user?.user[0]?.subscription_end) + "d"}
+              </span>
 
-          <button
-            className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
-            onClick={() => navigate("/pricing-modal")}
-          >
-            Upgrade
-          </button>
-          }
+              {/* Desktop full version */}
+              <span className="hidden sm:inline">
+                {user?.user[0]?.plan === "Free Trial"
+                  ? "Free Trial"
+                  : "Subscription"}{" "}
+                Ends in:{" "}
+                {LeftSubscriptionDays(user?.user[0]?.subscription_end) === "0"
+                  ? "Today"
+                  : LeftSubscriptionDays(user?.user[0]?.subscription_end) ===
+                    "1"
+                  ? "Tomorrow"
+                  : LeftSubscriptionDays(user?.user[0]?.subscription_end) +
+                    " days"}
+              </span>
+            </p>
+          )}
+
+          {CheckSubscriptionIsEnd(user?.user[0]?.subscription_end) &&
+          user?.user[0]?.subscription_count >= 2 ? (
+            <button
+              className="text-white bg-blue-500 hover:bg-blue-600 rounded-md px-2 py-1 text-sm"
+              onClick={() => navigate("/pricing-modal?action=renew")}
+            >
+              Renew
+            </button>
+          ) : (
+            user?.user[0]?.subscription_count <= 1 && (
+              <button
+                className="text-white bg-green-500 hover:bg-green-600 rounded-md px-2 py-1 text-sm"
+                onClick={() => navigate("/pricing-modal")}
+              >
+                Upgrade
+              </button>
+            )
+          )}
 
           <button
             className="relative p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
