@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 import Login from "./pages/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 import Layout from "./pages/Layout";
 import RTPAS from "./routes/routes";
@@ -27,6 +27,7 @@ import { motion } from "motion/react";
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
   const [cookies] = useCookies();
+  const navigate = useNavigate();
 
   /** -------------------------------
    *  FIXED USER ID RESOLUTION LOGIC
@@ -53,15 +54,14 @@ const App: React.FC = () => {
     cookies.access_token ? userId : ""
   );
 
-  const subscriptionEnded =
-    isSubscriptionEnd(user?.user?.[0]?.subscription_end);
+
 
 
   /** -------------------------------
    *  Handle Route Permissions
    *  ------------------------------- */
   const handleRoutes = (plan: string) => {
-    if (subscriptionEnded) return [];
+    if (isSubscriptionEnd(user?.user?.[0]?.subscription_end)) return [];
 
     switch (plan) {
       case "RTPAS":
@@ -84,8 +84,8 @@ const App: React.FC = () => {
    *  Redirect on subscription end
    *  ------------------------------- */
   useEffect(() => {
-    if (user && subscriptionEnded) {
-      window.location.href = "/subscription-end";
+    if (user && isSubscriptionEnd(user?.user?.[0]?.subscription_end)) {
+      navigate("/subscription-end")
     }
   }, [user]);
 
@@ -118,7 +118,6 @@ const App: React.FC = () => {
   return (
     <div className="relative min-h-[99vh] bg-gray-50">
       <ToastContainer />
-      <BrowserRouter>
         <Routes>
           {/* Public Routes (no token) */}
           {!cookies.access_token && (
@@ -174,7 +173,6 @@ const App: React.FC = () => {
           {/* Not Found */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
     </div>
   );
 };

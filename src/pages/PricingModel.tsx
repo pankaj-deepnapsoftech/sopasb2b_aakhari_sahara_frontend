@@ -4,11 +4,34 @@ import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+import { useGetLoggedInUserQuery } from "../redux/api/api";
+import { isSubscriptionEnd } from "../utils/dateModifyer";
 
 export default function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
+   const {id } = useSelector((state: any) => state.auth);
    const navigate = useNavigate();
    const [cookies] = useCookies();
+
+
+   const getSavedUserId = () => {
+    const raw = sessionStorage.getItem("Auth-data");
+    if (!raw) return null;
+
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed?._id || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const userId = id || getSavedUserId();
+
+    const { data: user, isLoading } = useGetLoggedInUserQuery(
+      cookies.access_token ? userId : ""
+    );
 
   // Load Razorpay checkout script dynamically
   const loadRazorpayScript = () => {
@@ -265,6 +288,10 @@ export default function PricingSection() {
 
   const plans = isYearly ? plansYearly : plansMonthly;
 
+  if(isLoading){
+    return "loading......."
+  }
+
   return (
     <section className="relative bg-gradient-to-b from-blue-100 to-white py-24 px-6">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-200/40 blur-3xl rounded-full"></div>
@@ -272,7 +299,7 @@ export default function PricingSection() {
       {/* 🔹 Global Close Button (top-right corner) */}
       <button
         className="absolute top-6 right-6 bg-white/70 hover:bg-blue-100 p-2 rounded-full shadow-md transition"
-        onClick={() => navigate("/")} // 👉 Replace with your own logic
+        onClick={() => navigate(isSubscriptionEnd(user?.user?.[0]?.subscription_end) ? "/subscription-end" : "/")} // 👉 Replace with your own logic
       >
         <X className="w-6 h-6 text-blue-700" />
       </button>
