@@ -811,10 +811,10 @@ const Analytics: React.FC = () => {
 
   // Fetch stats data on component mount
   useEffect(() => {
-    if (userDetails?.isSuper) {
+    if (userDetails) {
       fetchStatsData();
     }
-  }, [userDetails?.isSuper]);
+  }, [userDetails]);
 
   // Fetch sales-delivered data from API
   const fetchSalesDeliveredData = async () => {

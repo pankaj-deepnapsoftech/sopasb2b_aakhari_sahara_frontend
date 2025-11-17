@@ -323,7 +323,8 @@ const Approvals: React.FC = () => {
 
   // === NEW: APPROVE ALL FUNCTIONS ===
   const approveAllProducts = async () => {
-    if (!products.length) return toast.info("No products to approve");
+    if (!products.length) 
+      //return toast.info("No products to approve");
     setIsLoadingProducts(true);
     let success = 0, failed = 0;
     for (const p of products) {
@@ -334,12 +335,13 @@ const Approvals: React.FC = () => {
         failed++;
       }
     }
-    toast.success(`${success} products approved${failed ? `, ${failed} failed` : ""}`);
+    //toast.success(`${success} products approved${failed ? `, ${failed} failed` : ""}`);
     await fetchUnapprovedProductsHandler();
   };
 
   const approveAllStores = async () => {
-    if (!stores.length) return toast.info("No stores to approve");
+    if (!stores.length) 
+      // return toast.info("No stores to approve");
     setIsLoadingStores(true);
     let success = 0, failed = 0;
     for (const s of stores) {
@@ -350,13 +352,14 @@ const Approvals: React.FC = () => {
         failed++;
       }
     }
-    toast.success(`${success} stores approved${failed ? `, ${failed} failed` : ""}`);
+    // toast.success(`${success} stores approved${failed ? `, ${failed} failed` : ""}`);
     await fetchUnapprovedStoresHandler();
   };
 
   const approveAllAgents = async () => {
     const allAgents = [...buyers, ...sellers];
-    if (!allAgents.length) return toast.info("No agents to approve");
+    if (!allAgents.length) 
+      // return toast.info("No agents to approve");
     setIsLoadingBuyers(true);
     setIsLoadingSellers(true);
     let success = 0, failed = 0;
@@ -368,12 +371,13 @@ const Approvals: React.FC = () => {
         failed++;
       }
     }
-    toast.success(`${success} agents approved${failed ? `, ${failed} failed` : ""}`);
+    //toast.success(`${success} agents approved${failed ? `, ${failed} failed` : ""}`);
     await Promise.all([fetchUnapprovedBuyersHandler(), fetchUnapprovedSellersHandler()]);
   };
 
   const approveAllBoms = async () => {
-    if (!boms.length) return toast.info("No BOMs to approve");
+    if (!boms.length)
+      // return toast.info("No BOMs to approve");
     setIsLoadingBoms(true);
     let success = 0, failed = 0;
     for (const b of boms) {
@@ -384,12 +388,13 @@ const Approvals: React.FC = () => {
         failed++;
       }
     }
-    toast.success(`${success} BOMs approved${failed ? `, ${failed} failed` : ""}`);
+   // toast.success(`${success} BOMs approved${failed ? `, ${failed} failed` : ""}`);
     await fetchUnapprovedBomsHandler();
   };
 
   const approveAllBomRMs = async () => {
-    if (!bomRMs.length) return toast.info("No BOM Raw Materials to approve");
+    if (!bomRMs.length)
+      // return toast.info("No BOM Raw Materials to approve");
     setIsLoadingBomRMs(true);
     let success = 0, failed = 0;
     for (const rm of bomRMs) {
@@ -411,7 +416,7 @@ const Approvals: React.FC = () => {
         failed++;
       }
     }
-    toast.success(`${success} BOM RMs approved${failed ? `, ${failed} failed` : ""}`);
+   // toast.success(`${success} BOM RMs approved${failed ? `, ${failed} failed` : ""}`);
     await fetchUnapprovedBomRMsHandler();
   };
 
