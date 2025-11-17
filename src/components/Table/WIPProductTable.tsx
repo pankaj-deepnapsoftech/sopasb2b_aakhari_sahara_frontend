@@ -1,33 +1,17 @@
 // @ts-nocheck
-
-import {
-  Select,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
 import moment from "moment";
 import { useMemo } from "react";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-import { MdDeleteOutline, MdEdit, MdOutlineVisibility } from "react-icons/md";
-import { FcApproval, FcDatabase } from "react-icons/fc";
 import {
   usePagination,
   useSortBy,
   useTable,
   Column,
-  TableState,
   TableInstance,
   HeaderGroup,
-  Row,
   Cell,
 } from "react-table";
 import Loading from "../../ui/Loading";
-import EmptyData from "../../ui/emptyData";
 import { colors } from "../../theme/colors";
 
 interface WIPProductTableProps {
@@ -130,8 +114,6 @@ const WIPProductTable: React.FC<WIPProductTableProps> = ({
   );
 
   const {
-    getTableProps,
-    getTableBodyProps,
     headerGroups,
     prepareRow,
     page,

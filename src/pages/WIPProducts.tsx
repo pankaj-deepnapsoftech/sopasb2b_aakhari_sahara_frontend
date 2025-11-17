@@ -34,13 +34,10 @@ const WIPProducts: React.FC = () => {
   const [filteredData, setFilteredData] = useState<any>([]);
 
   // Bulk upload menu
-  const [showBulkUploadMenu, setShowBulkUploadMenu] = useState<boolean>(false);
 
   // Filters
   const [productServiceFilter, setProductServiceFilter] = useState<string>("");
-  const [storeOptions, setStoreOptions] = useState<
-    { value: string; label: string }[] | []
-  >([]);
+
   const [storeFilter, setStoreFilter] = useState<
     { value: string; label: string } | undefined
   >();
@@ -121,33 +118,7 @@ const WIPProducts: React.FC = () => {
     }
   };
 
-  const fetchAllStores = async () => {
-    try {
-      const response = await fetch(
-        process.env.REACT_APP_BACKEND_URL + "store/all",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${cookies?.access_token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.message);
-      }
-      let modifiedStores = [{ value: "", label: "All" }];
-      modifiedStores.push(
-        ...data.stores.map((store: any) => ({
-          value: store._id,
-          label: store.name,
-        }))
-      );
-      setStoreOptions(modifiedStores);
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong");
-    }
-  };
+
 
   const bulkUploadHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -174,7 +145,6 @@ const WIPProducts: React.FC = () => {
 
   useEffect(() => {
     fetchProductsHandler();
-    fetchAllStores();
   }, []);
 
   useEffect(() => {
