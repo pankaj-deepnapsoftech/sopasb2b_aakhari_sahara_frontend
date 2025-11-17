@@ -1,15 +1,8 @@
-
 // @ts-nocheck
 
 import {
   Select,
   Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import { FaHistory } from "react-icons/fa"; // Importing the icon
 import { useEffect, useRef } from "react";
@@ -97,11 +90,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   // State for latest price history update
   const [isLatestPriceModalOpen, setIsLatestPriceModalOpen] = useState<string | null>(null); // Track product ID for open modal
-  // const [priceHistory, setPriceHistory] = useState([]);
   const modalRef = useRef<HTMLDivElement>(null); // Ref for positioning
 
   // Bulk selection states
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
@@ -109,6 +101,9 @@ const ProductTable: React.FC<ProductTableProps> = ({
     indirect: { text: "#e70000" },
     direct: { text: "#25d98b" },
   };
+
+  // console.log("PRODUCTS", products);
+  // console.log("COLUMNS", columns);
 
   const {
     getTableProps,
@@ -124,22 +119,23 @@ const ProductTable: React.FC<ProductTableProps> = ({
     pageCount,
     setPageSize,
   } = useTable(
-    { columns, data: products, initialState: { pageIndex: 0 } },
+    { columns, data: products || [], initialState: { pageIndex: 0 } },
     useSortBy,
     usePagination
   );
 
   const [cookies] = useCookies();
+
   // Bulk selection functions
-  const handleSelectAll = (checked) => {
+  const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedProducts(page.map((row) => row.original._id));
+      setSelectedProducts(page?.map((row) => row?.original?._id) || []);
     } else {
       setSelectedProducts([]);
     }
   };
 
-  const handleSelectProduct = (productId, checked) => {
+  const handleSelectProduct = (productId: string, checked: boolean) => {
     if (checked) {
       setSelectedProducts((prev) => [...prev, productId]);
     } else {
@@ -155,7 +151,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const handleBulkDelete = async () => {
     if (
       isBulkDeleting ||
-      selectedProducts.length === 0 ||
+      selectedProducts?.length === 0 ||
       !bulkDeleteProductsHandler
     )
       return;
@@ -185,12 +181,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
     };
   }, []);
 
- 
-
   const isAllSelected =
-    page.length > 0 && selectedProducts.length === page.length;
+    page.length > 0 && selectedProducts?.length === page.length;
   const isIndeterminate =
-    selectedProducts.length > 0 && selectedProducts.length < page.length;
+    selectedProducts?.length > 0 && selectedProducts?.length < page.length;
 
   return (
     <div className="p-6">
@@ -211,7 +205,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
         </div>
       )}
 
-      {!isLoadingProducts && products.length === 0 && (
+      {!isLoadingProducts && products?.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div
             className="rounded-full p-6 mb-4"
@@ -244,7 +238,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
         </div>
       )}
 
-      {!isLoadingProducts && products.length > 0 && (
+      {!isLoadingProducts && products?.length > 0 && (
         <>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-6">
@@ -253,12 +247,12 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   className="text-lg font-semibold"
                   style={{ color: colors.text.primary }}
                 >
-                  {products.length} Product{products.length !== 1 ? "s" : ""}{" "}
+                  {products?.length} Product{products?.length !== 1 ? "s" : ""}{" "}
                   Found
                 </h3>
               </div>
 
-              {selectedProducts.length > 0 && (
+              {selectedProducts?.length > 0 && (
                 <div className="flex items-center gap-3">
                   {bulkDeleteProductsHandler && (
                     <button
@@ -278,7 +272,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                         />
                       </svg>
-                      Delete Selected ({selectedProducts.length})
+                      Delete Selected ({selectedProducts?.length})
                     </button>
                   )}
                   <button
@@ -315,7 +309,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 onChange={(e) => setPageSize(Number(e.target.value))}
                 value={pageSize}
                 size="sm"
-                width="auto"
                 borderRadius="lg"
                 borderColor={colors.border.light}
                 _focus={{
@@ -344,7 +337,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 <thead
                   style={{
                     backgroundColor: colors.table.header,
-                   // position: "sticky",
                     top: 0,
                     zIndex: 2,
                   }}
@@ -360,17 +352,15 @@ const ProductTable: React.FC<ProductTableProps> = ({
                         minWidth: "60px",
                       }}
                     >
-                      {cookies?.role === "admin" && (
-                        <input
-                          type="checkbox"
-                          checked={isAllSelected}
-                          ref={(el) => {
-                            if (el) el.indeterminate = isIndeterminate;
-                          }}
-                          onChange={(e) => handleSelectAll(e.target.checked)}
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                        />
-                      )}
+                      <input
+                        type="checkbox"
+                        checked={isAllSelected}
+                        ref={(el) => {
+                          if (el) el.indeterminate = isIndeterminate;
+                        }}
+                        onChange={(e) => handleSelectAll(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                      />
                     </th>
                     <th
                       className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap"
@@ -386,7 +376,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap"
                       style={{
                         color: colors.table.headerText,
-                       // position: "sticky",
                         top: 0,
                         left: 0,
                         zIndex: 3,
@@ -486,21 +475,19 @@ const ProductTable: React.FC<ProductTableProps> = ({
                             minWidth: "60px",
                           }}
                         >
-                          {cookies?.role === "admin" && (
-                            <input
-                              type="checkbox"
-                              checked={selectedProducts.includes(
-                                row.original._id
-                              )}
-                              onChange={(e) =>
-                                handleSelectProduct(
-                                  row.original._id,
-                                  e.target.checked
-                                )
-                              }
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                            />
-                          )}
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(
+                              row.original._id
+                            )}
+                            onChange={(e) =>
+                              handleSelectProduct(
+                                row.original._id,
+                                e.target.checked
+                              )
+                            }
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                          />
                         </td>
                         <td
                           className="px-4 py-3 text-sm font-mono whitespace-nowrap"
@@ -516,7 +503,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
                           className="px-4 py-3 text-sm font-medium whitespace-nowrap max-w-xs truncate"
                           style={{
                             color: colors.text.secondary,
-                           // position: "sticky",
                             left: 0,
                             zIndex: 1,
                             backgroundColor:
@@ -751,31 +737,28 @@ const ProductTable: React.FC<ProductTableProps> = ({
                                 <MdEdit size={16} />
                               </button>
                             )}
-                            {deleteProductHandler &&
-                              cookies?.role === "admin" && (
-                                <button
-                                  onClick={() => {
-                                    setdeleteId(row.original._id);
-                                    setshowDeletePage(true);
-                                  }}
-                                  className="p-2 rounded-lg transition-all duration-200 hover:shadow-md"
-                                  style={{
-                                    color: colors.error[600],
-                                    backgroundColor: colors.error[50],
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      colors.error[100];
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      colors.error[50];
-                                  }}
-                                  title="Delete product"
-                                >
-                                  <MdDeleteOutline size={16} />
-                                </button>
-                              )}
+                            <button
+                              onClick={() => {
+                                setdeleteId(row.original._id);
+                                setshowDeletePage(true);
+                              }}
+                              className="p-2 rounded-lg transition-all duration-200 hover:shadow-md"
+                              style={{
+                                color: colors.error[600],
+                                backgroundColor: colors.error[50],
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  colors.error[100];
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  colors.error[50];
+                              }}
+                              title="Delete product"
+                            >
+                              <MdDeleteOutline size={16} />
+                            </button>
                             {approveProductHandler && (
                               <button
                                 onClick={() =>
@@ -971,7 +954,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 </button>
                 <button
                   onClick={() => {
-                    deleteProductHandler(deleteId);
+                    deleteProductHandler?.(deleteId);
                     setshowDeletePage(false);
                   }}
                   className="flex-1 px-4 py-2 rounded-lg transition-all duration-200"
@@ -1050,8 +1033,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
                         className="font-medium text-center"
                         style={{ color: colors.error[800] }}
                       >
-                        Delete {selectedProducts.length} Product
-                        {selectedProducts.length > 1 ? "s" : ""}
+                        Delete {selectedProducts?.length} Product
+                        {selectedProducts?.length > 1 ? "s" : ""}
                       </p>
                       <p
                         className="text-sm text-center"
@@ -1093,8 +1076,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       Deleting...
                     </>
                   ) : (
-                    `Delete ${selectedProducts.length} Product${
-                      selectedProducts.length > 1 ? "s" : ""
+                    `Delete ${selectedProducts?.length} Product${
+                      selectedProducts?.length > 1 ? "s" : ""
                     }`
                   )}
                 </button>
