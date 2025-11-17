@@ -1,9 +1,7 @@
-import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import { MdOutlineRefresh, MdAdd } from "react-icons/md";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MdOutlineRefresh } from "react-icons/md";
+import React, { useEffect, useState } from "react";
 import {
   useDeleteProductMutation,
-  useProductBulKUploadMutation,
 } from "../redux/api/api";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
@@ -12,7 +10,6 @@ import {
   closeAddProductDrawer,
   closeProductDetailsDrawer,
   closeUpdateProductDrawer,
-  openAddProductDrawer,
   openProductDetailsDrawer,
   openUpdateProductDrawer,
 } from "../redux/reducers/drawersSlice";
@@ -25,8 +22,6 @@ import { colors } from "../theme/colors";
 import { PackageSearch } from "lucide-react";
 
 const WIPProducts: React.FC = () => {
-  const { isSuper, allowedroutes } = useSelector((state: any) => state.auth);
-  const isAllowed = isSuper || allowedroutes.includes("inventory");
   const [cookies] = useCookies();
   const [data, setData] = useState([]);
   const [productId, setProductId] = useState<string | undefined>(); // Product Id to be updated or deleted
@@ -35,16 +30,8 @@ const WIPProducts: React.FC = () => {
 
   // Bulk upload menu
 
-  // Filters
-  const [productServiceFilter, setProductServiceFilter] = useState<string>("");
 
-  const [storeFilter, setStoreFilter] = useState<
-    { value: string; label: string } | undefined
-  >();
-  const fileRef = useRef<HTMLInputElement | null>(null);
-  const [bulkUploading, setBulkUploading] = useState<boolean>(false);
 
-  const [bulkUpload] = useProductBulKUploadMutation();
 
   const {
     isAddProductDrawerOpened,
@@ -55,9 +42,7 @@ const WIPProducts: React.FC = () => {
 
   const [deleteProduct] = useDeleteProductMutation();
 
-  const openAddProductDrawerHandler = () => {
-    dispatch(openAddProductDrawer());
-  };
+
 
   const closeProductDrawerHandler = () => {
     dispatch(closeAddProductDrawer());
@@ -120,28 +105,28 @@ const WIPProducts: React.FC = () => {
 
 
 
-  const bulkUploadHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const bulkUploadHandler = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    const file = fileRef?.current?.files?.[0];
-    if (!file) {
-      toast.error("CSV file not selected");
-      return;
-    }
+  //   const file = fileRef?.current?.files?.[0];
+  //   if (!file) {
+  //     toast.error("CSV file not selected");
+  //     return;
+  //   }
 
-    try {
-      setBulkUploading(true);
-      const formData = new FormData();
-      formData.append("excel", file);
+  //   try {
+  //     setBulkUploading(true);
+  //     const formData = new FormData();
+  //     formData.append("excel", file);
 
-      const response = await bulkUpload(formData).unwrap();
-      toast.success(response.message);
-    } catch (err: any) {
-      toast.error(err?.data?.message || err?.message || "Something went wrong");
-    } finally {
-      setBulkUploading(false);
-    }
-  };
+  //     const response = await bulkUpload(formData).unwrap();
+  //     toast.success(response.message);
+  //   } catch (err: any) {
+  //     toast.error(err?.data?.message || err?.message || "Something went wrong");
+  //   } finally {
+  //     setBulkUploading(false);
+  //   }
+  // };
 
   useEffect(() => {
     fetchProductsHandler();
@@ -175,7 +160,7 @@ const WIPProducts: React.FC = () => {
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
     setFilteredData(results);
-  }, [searchKey, productServiceFilter, storeFilter]);
+  }, [searchKey]);
 
   // if (!isAllowed) {
   //   return (
