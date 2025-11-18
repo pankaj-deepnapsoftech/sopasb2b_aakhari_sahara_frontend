@@ -9,6 +9,7 @@ const initialState = {
     allowedroutes: [],
     isSuper: false,
     isVerified:false,
+    isAdministration:false
 }
 
 const authSlice = createSlice({
@@ -23,7 +24,9 @@ const authSlice = createSlice({
             state.phone = action.payload.phone;
             state.allowedroutes = action.payload?.role?.permissions || [];
             state.isSuper = action.payload.isSuper;
-            state.isVerified = action.payload.isVerified
+            state.isVerified = action.payload.isVerified;
+            state.isAdministration = action.payload.isAdministration;
+
         },
         userNotExists: (state)=>{
             state.id = undefined;
@@ -34,6 +37,7 @@ const authSlice = createSlice({
             state.allowedroutes = [];
             state.isSuper = false;
             state.isVerified = false;
+            state.isAdministration = false;
         }
     }
 });

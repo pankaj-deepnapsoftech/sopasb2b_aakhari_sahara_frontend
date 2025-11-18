@@ -50,6 +50,8 @@ const LoginComponent: React.FC<LoginComponentProps> = ({
       }).unwrap();
       // dispatch(userExists(data.user));
 
+      console.log("this is my data User",data.user);
+
       if (data.user.role) {
         dispatch(userExists(data.user));
       } else if (data?.user?.isSuper) {
@@ -67,6 +69,7 @@ const LoginComponent: React.FC<LoginComponentProps> = ({
       }
       setCookie("name", data.user.first_name, { maxAge: 1000 * 60 * 60 * 24 });
       setCookie("email", data.user.email, { maxAge: 1000 * 60 * 60 * 24 });
+      setCookie("isAdministration", data.user.isAdministration, { maxAge: 1000 * 60 * 60 * 24 });
       toast.success(data.message);
       navigate("/");
     } catch (err: any) {

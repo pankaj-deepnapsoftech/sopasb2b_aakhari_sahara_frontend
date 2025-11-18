@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const SuperAdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -76,10 +77,16 @@ const SuperAdminDashboard = () => {
     loadDummyData();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('superAdminToken');
-    toast.success('Logged out successfully');
-    navigate('/super-admin-login');
+    const [cookie, _, removeCookie] = useCookies();
+
+ const logoutHandler = () => {
+    try {
+      removeCookie("access_token");
+      toast.success("Logged out successfully");
+      navigate("/login");
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    }
   };
 
   // Demo-only Export
@@ -149,7 +156,7 @@ const SuperAdminDashboard = () => {
               <p className="text-gray-600 mt-1">Welcome, {superAdminProfile.name} ({superAdminProfile.email})</p>
             )}
           </div>
-          <button onClick={handleLogout} className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+          <button onClick={logoutHandler} className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
             Logout
           </button>
         </div>
