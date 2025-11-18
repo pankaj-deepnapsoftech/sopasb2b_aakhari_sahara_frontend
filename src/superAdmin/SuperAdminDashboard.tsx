@@ -82,6 +82,7 @@ const SuperAdminDashboard = () => {
  const logoutHandler = () => {
     try {
       removeCookie("access_token");
+      removeCookie("isAdministration");
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error: any) {
