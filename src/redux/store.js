@@ -15,6 +15,7 @@ import {
 } from "./api/api";
 import authSlice from "./reducers/authSlice";
 import drawersSlice from "./reducers/drawersSlice";
+import { subscriptionApi } from "./api/subscriptionApi";
 
 const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ const store = configureStore({
     [invoiceApi.reducerPath]: invoiceApi.reducer,
     [paymentApi.reducerPath]: paymentApi.reducer,
     [dispatchApi.reducerPath]: dispatchApi.reducer,
+    [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -48,6 +50,7 @@ const store = configureStore({
       processApi.middleware,
       paymentApi.middleware,
       dispatchApi.middleware,
+     subscriptionApi.middleware,
     ]),
 });
 
