@@ -86,8 +86,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setProducts(data.unapproved || []);
-      setFilteredProducts(data.unapproved || []);
+      setProducts(data.unapproved);
+      setFilteredProducts(data.unapproved);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -132,8 +132,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setStores(data.unapproved || []);
-      setFilteredStores(data.unapproved || []);
+      setStores(data.unapproved);
+      setFilteredStores(data.unapproved);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -175,8 +175,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setBuyers(data.agents || []);
-      setFilteredBuyers(data.agents || []);
+      setBuyers(data.agents);
+      setFilteredBuyers(data.agents);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -197,8 +197,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setSellers(data.agents || []);
-      setFilteredSellers(data.agents || []);
+      setSellers(data.agents);
+      setFilteredSellers(data.agents);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -242,8 +242,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setBoms(data.boms || []);
-      setFilteredBoms(data.boms || []);
+      setBoms(data.boms);
+      setFilteredBoms(data.boms);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -285,8 +285,8 @@ const Approvals: React.FC = () => {
         }
       );
       const data = await response.json();
-      setBomRMs(data.unapproved || []);
-      setFilteredBomRMs(data.unapproved || []);
+      setBomRMs(data.unapproved);
+      setFilteredBomRMs(data.unapproved);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     } finally {
@@ -321,119 +321,6 @@ const Approvals: React.FC = () => {
     }
   };
 
-  // === NEW: APPROVE ALL FUNCTIONS ===
-  const approveAllProducts = async () => {
-    if (!products.length) 
-      //return toast.info("No products to approve");
-    setIsLoadingProducts(true);
-    let success = 0, failed = 0;
-    for (const p of products) {
-      try {
-        await updateProduct({ _id: p._id, approved: true }).unwrap();
-        success++;
-      } catch {
-        failed++;
-      }
-    }
-    //toast.success(`${success} products approved${failed ? `, ${failed} failed` : ""}`);
-    await fetchUnapprovedProductsHandler();
-  };
-
-  const approveAllStores = async () => {
-    if (!stores.length) 
-      // return toast.info("No stores to approve");
-    setIsLoadingStores(true);
-    let success = 0, failed = 0;
-    for (const s of stores) {
-      try {
-        await updateStore({ _id: s._id, approved: true }).unwrap();
-        success++;
-      } catch {
-        failed++;
-      }
-    }
-    // toast.success(`${success} stores approved${failed ? `, ${failed} failed` : ""}`);
-    await fetchUnapprovedStoresHandler();
-  };
-
-  const approveAllAgents = async () => {
-    const allAgents = [...buyers, ...sellers];
-    if (!allAgents.length) 
-      // return toast.info("No agents to approve");
-    setIsLoadingBuyers(true);
-    setIsLoadingSellers(true);
-    let success = 0, failed = 0;
-    for (const a of allAgents) {
-      try {
-        await updateAgent({ _id: a._id, approved: true }).unwrap();
-        success++;
-      } catch {
-        failed++;
-      }
-    }
-    //toast.success(`${success} agents approved${failed ? `, ${failed} failed` : ""}`);
-    await Promise.all([fetchUnapprovedBuyersHandler(), fetchUnapprovedSellersHandler()]);
-  };
-
-  const approveAllBoms = async () => {
-    if (!boms.length)
-      // return toast.info("No BOMs to approve");
-    setIsLoadingBoms(true);
-    let success = 0, failed = 0;
-    for (const b of boms) {
-      try {
-        await updateBom({ _id: b._id, approved: true }).unwrap();
-        success++;
-      } catch {
-        failed++;
-      }
-    }
-   // toast.success(`${success} BOMs approved${failed ? `, ${failed} failed` : ""}`);
-    await fetchUnapprovedBomsHandler();
-  };
-
-  const approveAllBomRMs = async () => {
-    if (!bomRMs.length)
-      // return toast.info("No BOM Raw Materials to approve");
-    setIsLoadingBomRMs(true);
-    let success = 0, failed = 0;
-    for (const rm of bomRMs) {
-      try {
-        const res = await fetch(
-          process.env.REACT_APP_BACKEND_URL + "bom/approve/raw-materials",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${cookies?.access_token}`,
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({ _id: rm._id }),
-          }
-        );
-        const data = await res.json();
-        if (data.success) success++; else failed++;
-      } catch {
-        failed++;
-      }
-    }
-   // toast.success(`${success} BOM RMs approved${failed ? `, ${failed} failed` : ""}`);
-    await fetchUnapprovedBomRMsHandler();
-  };
-
-  // === AUTO APPROVE ALL ON MOUNT ===
-  useEffect(() => {
-    const autoApproveAll = async () => {
-      await Promise.allSettled([
-        approveAllProducts(),
-        approveAllStores(),
-        approveAllAgents(),
-        approveAllBoms(),
-        approveAllBomRMs(),
-      ]);
-    };
-    autoApproveAll();
-  }, []);
-
   useEffect(() => {
     fetchUnapprovedProductsHandler();
     fetchUnapprovedStoresHandler();
@@ -443,19 +330,17 @@ const Approvals: React.FC = () => {
     fetchUnapprovedBomRMsHandler();
   }, []);
 
-  // Product Search (FIXED: was setting filteredStores!)
+  // Product Search
   useEffect(() => {
-    const searchTxt = productSearchKey?.toLowerCase() || "";
+    const searchTxt = productSearchKey?.toLowerCase();
     const results = products.filter(
       (prod: any) =>
         prod.name?.toLowerCase()?.includes(searchTxt) ||
         prod.product_id?.toLowerCase()?.includes(searchTxt) ||
         prod.category?.toLowerCase()?.includes(searchTxt) ||
-        prod.price?.toString()?.includes(searchTxt) ||
-        prod.uom?.toLowerCase()?.
-
-includes(searchTxt) ||
-        prod.current_stock?.toString().includes(searchTxt) ||
+        prod.price?.toString()?.toLowerCase()?.toString().includes(searchTxt) ||
+        prod.uom?.toLowerCase()?.includes(searchTxt) ||
+        prod.current_stock?.toString().toString().includes(searchTxt) ||
         prod?.min_stock?.toString()?.includes(searchTxt) ||
         prod?.max_stock?.toString()?.includes(searchTxt) ||
         prod?.hsn?.includes(searchTxt) ||
@@ -476,8 +361,8 @@ includes(searchTxt) ||
             ?.join("")
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
-    setFilteredProducts(results); // FIXED
-  }, [productSearchKey, products]);
+    setFilteredStores(results);
+  }, [productSearchKey]);
 
   // Store Search
   useEffect(() => {
@@ -489,9 +374,10 @@ includes(searchTxt) ||
         st.address_line1
           ?.toString()
           ?.toLowerCase()
-          ?.includes(searchTxt) ||
+          ?.toString()
+          .includes(searchTxt) ||
         st.address_line2?.toLowerCase()?.includes(searchTxt) ||
-        st.pincode?.toString().includes(searchTxt) ||
+        st.pincode?.toString().toString().includes(searchTxt) ||
         st?.city?.toString()?.includes(searchTxt) ||
         st?.state?.toString()?.includes(searchTxt) ||
         (st?.createdAt &&
@@ -512,7 +398,7 @@ includes(searchTxt) ||
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
     setFilteredStores(results);
-  }, [storeSearchKey, stores]);
+  }, [storeSearchKey]);
 
   // Buyer Search
   useEffect(() => {
@@ -549,7 +435,7 @@ includes(searchTxt) ||
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
     setFilteredBuyers(results);
-  }, [buyerSearchKey, buyers]);
+  }, [buyerSearchKey]);
 
   // Seller Search
   useEffect(() => {
@@ -586,7 +472,7 @@ includes(searchTxt) ||
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
     setFilteredSellers(results);
-  }, [sellerSearchKey, sellers]);
+  }, [sellerSearchKey]);
 
   // BOM Search
   useEffect(() => {
@@ -618,17 +504,16 @@ includes(searchTxt) ||
             ?.includes(searchTxt?.replaceAll("/", "") || ""))
     );
     setFilteredBoms(results);
-  }, [bomSearchKey, boms]);
+  }, [bomSearchKey]);
 
-  // BOM Raw Materials Search
-  useEffect(() => {
-    const searchTxt = bomRMSearchKey?.toLowerCase() || "";
-    const results = bomRMs.filter((rm: any) =>
-      Object.values(rm).some(v => String(v).toLowerCase().includes(searchTxt))
-    );
-    setFilteredBomRMs(results);
-  }, [bomRMSearchKey, bomRMs]);
-
+  // if (!isAllowed) {
+  //   return (
+  //     <div className="text-center text-red-500">
+  //       You are not allowed to access this route.
+  //     </div>
+  //   );
+  // }
+ 
   const sections = [
     { id: "products", label: "Products" },
     { id: "stores", label: "Stores" },
@@ -637,10 +522,477 @@ includes(searchTxt) ||
     { id: "boms", label: "BOMs" },
     { id: "bomRMs", label: "BOM Raw Materials" },
   ];
-
   return (
+      // <div
+      //   className="min-h-screen"
+      //   style={{ backgroundColor: colors.background.page }}
+      // >
+      //   <div className="p-2 lg:p-3">
+      //     {/* Main Header */}
+      //     <div
+      //       className="rounded-xl shadow-sm border border-gray-100 p-6 mb-6"
+      //       style={{
+      //         backgroundColor: colors.background.card,
+      //         borderColor: colors.border.light,
+      //       }}
+      //     >
+      //       <div className="text-center">
+      //         <h1
+      //           className="text-2xl lg:text-3xl font-bold"
+      //           style={{ color: colors.text.primary }}
+      //         >
+      //           Approvals Management
+      //         </h1>
+      //         <p
+      //           className="text-sm mt-1"
+      //           style={{ color: colors.text.secondary }}
+      //         >
+      //           Review and approve pending products, stores, buyers, sellers, and
+      //           BOMs
+      //         </p>
+      //       </div>
+      //     </div>
+
+      //     {/* Products Section */}
+          // <div
+          //   className="rounded-xl shadow-sm border border-gray-100 mb-6"
+          //   style={{
+          //     backgroundColor: colors.background.card,
+          //     borderColor: colors.border.light,
+          //   }}
+          // >
+          //   <div
+          //     className="p-6 border-b"
+          //     style={{ borderColor: colors.border.light }}
+          //   >
+          //     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          //       <div>
+          //         <h2
+          //           className="text-xl font-semibold"
+          //           style={{ color: colors.text.primary }}
+          //         >
+          //           Products for Approval
+          //         </h2>
+          //         <p
+          //           className="text-sm mt-1"
+          //           style={{ color: colors.text.secondary }}
+          //         >
+          //           Review and approve pending products
+          //         </p>
+          //       </div>
+
+          //       <div className="flex flex-col sm:flex-row gap-3">
+          //         <div className="relative">
+          //           <FiSearch
+          //             className="absolute left-3 top-1/2 transform -translate-y-1/2"
+          //             style={{ color: colors.text.secondary }}
+          //           />
+          //           <input
+          //             className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+          //             style={{
+          //               backgroundColor: colors.input.background,
+          //               borderColor: colors.input.border,
+          //               color: colors.text.primary,
+          //             }}
+          //             placeholder="Search products..."
+          //             value={productSearchKey || ""}
+          //             onChange={(e) => setProductSearchKey(e.target.value)}
+          //           />
+          //         </div>
+
+          //         <button
+          //           onClick={fetchUnapprovedProductsHandler}
+          //           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+          //           style={{
+          //             borderColor: colors.border.medium,
+          //             color: colors.text.primary,
+          //             backgroundColor: colors.background.card,
+          //           }}
+          //         >
+          //           <MdOutlineRefresh size="16px" />
+          //           Refresh
+          //         </button>
+          //       </div>
+          //     </div>
+          //   </div>
+
+          //   <div className="overflow-hidden">
+          //     <ProductTable
+          //       isLoadingProducts={isLoadingProducts}
+          //       products={filteredProducts}
+          //       deleteProductHandler={deleteProductHandler}
+          //       approveProductHandler={approveProductHandler}
+          //     />
+          //   </div>
+          // </div>
+
+      //     {/* Stores Section */}
+      //     <div
+      //       className="rounded-xl shadow-sm border border-gray-100 mb-6"
+      //       style={{
+      //         backgroundColor: colors.background.card,
+      //         borderColor: colors.border.light,
+      //       }}
+      //     >
+      //       <div
+      //         className="p-6 border-b"
+      //         style={{ borderColor: colors.border.light }}
+      //       >
+      //         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      //           <div>
+      //             <h2
+      //               className="text-xl font-semibold"
+      //               style={{ color: colors.text.primary }}
+      //             >
+      //               Stores for Approval
+      //             </h2>
+      //             <p
+      //               className="text-sm mt-1"
+      //               style={{ color: colors.text.secondary }}
+      //             >
+      //               Review and approve pending stores
+      //             </p>
+      //           </div>
+
+      //           <div className="flex flex-col sm:flex-row gap-3">
+      //             <div className="relative">
+      //               <FiSearch
+      //                 className="absolute left-3 top-1/2 transform -translate-y-1/2"
+      //                 style={{ color: colors.text.secondary }}
+      //               />
+      //               <input
+      //                 className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+      //                 style={{
+      //                   backgroundColor: colors.input.background,
+      //                   borderColor: colors.input.border,
+      //                   color: colors.text.primary,
+      //                 }}
+      //                 placeholder="Search stores..."
+      //                 value={storeSearchKey || ""}
+      //                 onChange={(e) => setStoreSearchKey(e.target.value)}
+      //               />
+      //             </div>
+
+      //             <button
+      //               onClick={fetchUnapprovedStoresHandler}
+      //               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+      //               style={{
+      //                 borderColor: colors.border.medium,
+      //                 color: colors.text.primary,
+      //                 backgroundColor: colors.background.card,
+      //               }}
+      //             >
+      //               <MdOutlineRefresh size="16px" />
+      //               Refresh
+      //             </button>
+      //           </div>
+      //         </div>
+      //       </div>
+
+      //       <div className="overflow-hidden">
+      //         <StoreTable
+      //           isLoadingStores={isLoadingStores}
+      //           stores={filteredStores}
+      //           deleteStoreHandler={deleteStoreHandler}
+      //         />
+      //       </div>
+      //     </div>
+
+      //     {/* Buyers Section */}
+          // <div
+          //   className="rounded-xl shadow-sm border border-gray-100 mb-6"
+          //   style={{
+          //     backgroundColor: colors.background.card,
+          //     borderColor: colors.border.light,
+          //   }}
+          // >
+          //   <div
+          //     className="p-6 border-b"
+          //     style={{ borderColor: colors.border.light }}
+          //   >
+          //     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          //       <div>
+          //         <h2
+          //           className="text-xl font-semibold"
+          //           style={{ color: colors.text.primary }}
+          //         >
+          //           Buyers for Approval
+          //         </h2>
+          //         <p
+          //           className="text-sm mt-1"
+          //           style={{ color: colors.text.secondary }}
+          //         >
+          //           Review and approve pending buyers
+          //         </p>
+          //       </div>
+
+          //       <div className="flex flex-col sm:flex-row gap-3">
+          //         <div className="relative">
+          //           <FiSearch
+          //             className="absolute left-3 top-1/2 transform -translate-y-1/2"
+          //             style={{ color: colors.text.secondary }}
+          //           />
+          //           <input
+          //             className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+          //             style={{
+          //               backgroundColor: colors.input.background,
+          //               borderColor: colors.input.border,
+          //               color: colors.text.primary,
+          //             }}
+          //             placeholder="Search buyers..."
+          //             value={buyerSearchKey || ""}
+          //             onChange={(e) => setBuyerSearchKey(e.target.value)}
+          //           />
+          //         </div>
+
+          //         <button
+          //           onClick={fetchUnapprovedBuyersHandler}
+          //           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+          //           style={{
+          //             borderColor: colors.border.medium,
+          //             color: colors.text.primary,
+          //             backgroundColor: colors.background.card,
+          //           }}
+          //         >
+          //           <MdOutlineRefresh size="16px" />
+          //           Refresh
+          //         </button>
+          //       </div>
+          //     </div>
+          //   </div>
+
+          //   <div className="overflow-hidden">
+          //     <AgentTable
+          //       isLoadingAgents={isLoadingBuyers}
+          //       agents={filteredBuyers}
+          //       deleteAgentHandler={deleteAgentHandler}
+          //       approveAgentHandler={approveAgentHandler}
+          //     />
+          //   </div>
+          // </div>
+
+      //     {/* Sellers Section */}
+          // <div
+          //   className="rounded-xl shadow-sm border border-gray-100 mb-6"
+          //   style={{
+          //     backgroundColor: colors.background.card,
+          //     borderColor: colors.border.light,
+          //   }}
+          // >
+          //   <div
+          //     className="p-6 border-b"
+          //     style={{ borderColor: colors.border.light }}
+          //   >
+          //     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          //       <div>
+          //         <h2
+          //           className="text-xl font-semibold"
+          //           style={{ color: colors.text.primary }}
+          //         >
+          //           Suppliers for Approval
+          //         </h2>
+          //         <p
+          //           className="text-sm mt-1"
+          //           style={{ color: colors.text.secondary }}
+          //         >
+          //           Review and approve pending suppliers
+          //         </p>
+          //       </div>
+
+          //       <div className="flex flex-col sm:flex-row gap-3">
+          //         <div className="relative">
+          //           <FiSearch
+          //             className="absolute left-3 top-1/2 transform -translate-y-1/2"
+          //             style={{ color: colors.text.secondary }}
+          //           />
+          //           <input
+          //             className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+          //             style={{
+          //               backgroundColor: colors.input.background,
+          //               borderColor: colors.input.border,
+          //               color: colors.text.primary,
+          //             }}
+          //             placeholder="Search suppliers..."
+          //             value={sellerSearchKey || ""}
+          //             onChange={(e) => setSellerSearchKey(e.target.value)}
+          //           />
+          //         </div>
+
+          //         <button
+          //           onClick={fetchUnapprovedSellersHandler}
+          //           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+          //           style={{
+          //             borderColor: colors.border.medium,
+          //             color: colors.text.primary,
+          //             backgroundColor: colors.background.card,
+          //           }}
+          //         >
+          //           <MdOutlineRefresh size="16px" />
+          //           Refresh
+          //         </button>
+          //       </div>
+          //     </div>
+          //   </div>
+
+          //   <div className="overflow-hidden">
+          //     <AgentTable
+          //       isLoadingAgents={isLoadingSellers}
+          //       agents={filteredSellers}
+          //       deleteAgentHandler={deleteAgentHandler}
+          //       approveAgentHandler={approveAgentHandler}
+          //     />
+          //   </div>
+          // </div>
+
+      //     {/* BOMs Section */}
+          // <div
+          //   className="rounded-xl shadow-sm border border-gray-100 mb-6"
+          //   style={{
+          //     backgroundColor: colors.background.card,
+          //     borderColor: colors.border.light,
+          //   }}
+          // >
+          //   <div
+          //     className="p-6 border-b"
+          //     style={{ borderColor: colors.border.light }}
+          //   >
+          //     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          //       <div>
+          //         <h2
+          //           className="text-xl font-semibold"
+          //           style={{ color: colors.text.primary }}
+          //         >
+          //           BOMs for Approval
+          //         </h2>
+          //         <p
+          //           className="text-sm mt-1"
+          //           style={{ color: colors.text.secondary }}
+          //         >
+          //           Review and approve pending Bill of Materials
+          //         </p>
+          //       </div>
+
+          //       <div className="flex flex-col sm:flex-row gap-3">
+          //         <div className="relative">
+          //           <FiSearch
+          //             className="absolute left-3 top-1/2 transform -translate-y-1/2"
+          //             style={{ color: colors.text.secondary }}
+          //           />
+          //           <input
+          //             className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+          //             style={{
+          //               backgroundColor: colors.input.background,
+          //               borderColor: colors.input.border,
+          //               color: colors.text.primary,
+          //             }}
+          //             placeholder="Search BOMs..."
+          //             value={bomSearchKey || ""}
+          //             onChange={(e) => setBomSearchKey(e.target.value)}
+          //           />
+          //         </div>
+
+          //         <button
+          //           onClick={fetchUnapprovedBomsHandler}
+          //           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+          //           style={{
+          //             borderColor: colors.border.medium,
+          //             color: colors.text.primary,
+          //             backgroundColor: colors.background.card,
+          //           }}
+          //         >
+          //           <MdOutlineRefresh size="16px" />
+          //           Refresh
+          //         </button>
+          //       </div>
+          //     </div>
+          //   </div>
+
+          //   <div className="overflow-hidden">
+          //     <BOMTable
+          //       isLoadingBoms={isLoadingBoms}
+          //       boms={filteredBoms}
+          //       deleteBomHandler={deleteBomHandler}
+          //       approveBomHandler={approveBomHandler}
+          //     />
+          //   </div>
+          // </div>
+
+      //     {/* BOM Raw Materials Section */}
+          // <div
+          //   className="rounded-xl shadow-sm border border-gray-100 mb-6"
+          //   style={{
+          //     backgroundColor: colors.background.card,
+          //     borderColor: colors.border.light,
+          //   }}
+          // >
+          //   <div
+          //     className="p-6 border-b"
+          //     style={{ borderColor: colors.border.light }}
+          //   >
+          //     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          //       <div>
+          //         <h2
+          //           className="text-xl font-semibold"
+          //           style={{ color: colors.text.primary }}
+          //         >
+          //           BOM Raw Materials for Approval
+          //         </h2>
+          //         <p
+          //           className="text-sm mt-1"
+          //           style={{ color: colors.text.secondary }}
+          //         >
+          //           Review and approve pending BOM raw materials
+          //         </p>
+          //       </div>
+
+          //       <div className="flex flex-col sm:flex-row gap-3">
+          //         <div className="relative">
+          //           <FiSearch
+          //             className="absolute left-3 top-1/2 transform -translate-y-1/2"
+          //             style={{ color: colors.text.secondary }}
+          //           />
+          //           <input
+          //             className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+          //             style={{
+          //               backgroundColor: colors.input.background,
+          //               borderColor: colors.input.border,
+          //               color: colors.text.primary,
+          //             }}
+          //             placeholder="Search raw materials..."
+          //             value={bomRMSearchKey || ""}
+          //             onChange={(e) => setBomRMSearchKey(e.target.value)}
+          //           />
+          //         </div>
+
+          //         <button
+          //           onClick={fetchUnapprovedBomRMsHandler}
+          //           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+          //           style={{
+          //             borderColor: colors.border.medium,
+          //             color: colors.text.primary,
+          //             backgroundColor: colors.background.card,
+          //           }}
+          //         >
+          //           <MdOutlineRefresh size="16px" />
+          //           Refresh
+          //         </button>
+          //       </div>
+          //     </div>
+          //   </div>
+
+          //   <div className="overflow-hidden">
+          //     <BOMRawMaterialTable
+          //       isLoadingProducts={isLoadingBomRMs}
+          //       products={filteredBomRMs}
+          //       approveProductHandler={approveBomRMHandler}
+          //     />
+          //   </div>
+          // </div>
+      //   </div>
+      // </div>
     <div className="min-h-screen" style={{ backgroundColor: colors.background.page }}>
       <div className="p-2 lg:p-3">
+      
         <div
           className="rounded-xl shadow-sm border p-6 mb-6"
           style={{
@@ -653,11 +1005,12 @@ includes(searchTxt) ||
               Approvals Management
             </h1>
             <p className="text-sm mt-1" style={{ color: colors.text.secondary }}>
-              All unapproved items are automatically approved on page load.
+              Review and approve pending products, stores, buyers, sellers, and BOMs
             </p>
           </div>
         </div>
 
+       
         <div className="flex flex-wrap gap-3 mb-6">
           {sections.map((section) => (
             <button
@@ -676,7 +1029,7 @@ includes(searchTxt) ||
           ))}
         </div>
 
-        {/* PRODUCTS SECTION */}
+        {/* Conditionally Render Sections */}
         {activeSection === "products" && (
           <div
             className="rounded-xl shadow-sm border border-gray-100 mb-6"
@@ -736,10 +1089,6 @@ includes(searchTxt) ||
                     <MdOutlineRefresh size="16px" />
                     Refresh
                   </button>
-
-                  <Button colorScheme="green" size="sm" onClick={approveAllProducts} isLoading={isLoadingProducts}>
-                    Approve All
-                  </Button>
                 </div>
               </div>
             </div>
@@ -755,85 +1104,79 @@ includes(searchTxt) ||
           </div>
         )}
 
-        {/* STORES SECTION */}
         {activeSection === "stores" && (
           <div
-            className="rounded-xl shadow-sm border border-gray-100 mb-6"
-            style={{
-              backgroundColor: colors.background.card,
-              borderColor: colors.border.light,
-            }}
-          >
-            <div
-              className="p-6 border-b"
-              style={{ borderColor: colors.border.light }}
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div>
-                  <h2
-                    className="text-xl font-semibold"
-                    style={{ color: colors.text.primary }}
-                  >
-                    Stores for Approval
-                  </h2>
-                  <p
-                    className="text-sm mt-1"
-                    style={{ color: colors.text.secondary }}
-                  >
-                    Review and approve pending stores
-                  </p>
+                className="rounded-xl shadow-sm border border-gray-100 mb-6"
+                style={{
+                  backgroundColor: colors.background.card,
+                  borderColor: colors.border.light,
+                }}
+              >
+                <div
+                  className="p-6 border-b"
+                  style={{ borderColor: colors.border.light }}
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div>
+                      <h2
+                        className="text-xl font-semibold"
+                        style={{ color: colors.text.primary }}
+                      >
+                        Stores for Approval
+                      </h2>
+                      <p
+                        className="text-sm mt-1"
+                        style={{ color: colors.text.secondary }}
+                      >
+                        Review and approve pending stores
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative">
+                        <FiSearch
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                          style={{ color: colors.text.secondary }}
+                        />
+                        <input
+                          className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
+                          style={{
+                            backgroundColor: colors.input.background,
+                            borderColor: colors.input.border,
+                            color: colors.text.primary,
+                          }}
+                          placeholder="Search stores..."
+                          value={storeSearchKey || ""}
+                          onChange={(e) => setStoreSearchKey(e.target.value)}
+                        />
+                      </div>
+
+                      <button
+                        onClick={fetchUnapprovedStoresHandler}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
+                        style={{
+                          borderColor: colors.border.medium,
+                          color: colors.text.primary,
+                          backgroundColor: colors.background.card,
+                        }}
+                      >
+                        <MdOutlineRefresh size="16px" />
+                        Refresh
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="relative">
-                    <FiSearch
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2"
-                      style={{ color: colors.text.secondary }}
-                    />
-                    <input
-                      className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-3 transition-colors"
-                      style={{
-                        backgroundColor: colors.input.background,
-                        borderColor: colors.input.border,
-                        color: colors.text.primary,
-                      }}
-                      placeholder="Search stores..."
-                      value={storeSearchKey || ""}
-                      onChange={(e) => setStoreSearchKey(e.target.value)}
-                    />
-                  </div>
-
-                  <button
-                    onClick={fetchUnapprovedStoresHandler}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium border transition-colors"
-                    style={{
-                      borderColor: colors.border.medium,
-                      color: colors.text.primary,
-                      backgroundColor: colors.background.card,
-                    }}
-                  >
-                    <MdOutlineRefresh size="16px" />
-                    Refresh
-                  </button>
-
-                  <Button colorScheme="green" size="sm" onClick={approveAllStores} isLoading={isLoadingStores}>
-                    Approve All
-                  </Button>
+                <div className="overflow-hidden">
+                  <StoreTable
+                    isLoadingStores={isLoadingStores}
+                    stores={filteredStores}
+                    deleteStoreHandler={deleteStoreHandler}
+                  />
                 </div>
               </div>
-            </div>
-
-            <div className="overflow-hidden">
-              <StoreTable
-                isLoadingStores={isLoadingStores}
-                stores={filteredStores}
-                deleteStoreHandler={deleteStoreHandler}
-              />
-            </div>
-          </div>
         )}
 
-        {/* BUYERS SECTION */}
         {activeSection === "buyers" && (
           <div
             className="rounded-xl shadow-sm border border-gray-100 mb-6"
@@ -908,7 +1251,6 @@ includes(searchTxt) ||
           </div>
         )}
 
-        {/* SELLERS SECTION */}
         {activeSection === "sellers" && (
           <div
             className="rounded-xl shadow-sm border border-gray-100 mb-6"
@@ -983,7 +1325,6 @@ includes(searchTxt) ||
           </div>
         )}
 
-        {/* BOMS SECTION */}
         {activeSection === "boms" && (
           <div
             className="rounded-xl shadow-sm border border-gray-100 mb-6"
@@ -1043,10 +1384,6 @@ includes(searchTxt) ||
                     <MdOutlineRefresh size="16px" />
                     Refresh
                   </button>
-
-                  <Button colorScheme="green" size="sm" onClick={approveAllBoms} isLoading={isLoadingBoms}>
-                    Approve All
-                  </Button>
                 </div>
               </div>
             </div>
@@ -1062,7 +1399,6 @@ includes(searchTxt) ||
           </div>
         )}
 
-        {/* BOM RAW MATERIALS SECTION */}
         {activeSection === "bomRMs" && (
           <div
             className="rounded-xl shadow-sm border border-gray-100 mb-6"
@@ -1122,10 +1458,6 @@ includes(searchTxt) ||
                     <MdOutlineRefresh size="16px" />
                     Refresh
                   </button>
-
-                  <Button colorScheme="green" size="sm" onClick={approveAllBomRMs} isLoading={isLoadingBomRMs}>
-                    Approve All
-                  </Button>
                 </div>
               </div>
             </div>
