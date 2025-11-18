@@ -28,7 +28,7 @@ import AdministrationLayout from "./superAdmin/layout/Administration.layout";
 import SuperAdminSubscriptions from "./superAdmin/SuperAdminSubscriptions";
 
 const App: React.FC = () => {
-  const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
+  const { allowedroutes, isSuper, id,isAdministration } = useSelector((state: any) => state.auth);
   const [cookies] = useCookies();
   const navigate = useNavigate();
 
@@ -123,7 +123,7 @@ const App: React.FC = () => {
       <ToastContainer />
       <Routes>
         {/* Public Routes (no token) */}
-        {cookies.access_token && (
+        {!cookies.access_token && (
           <Route element={<LandingLayout />}>
             {PublicRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
@@ -136,13 +136,13 @@ const App: React.FC = () => {
         <Route path="/subscription-end" element={<SessionExpired />} />
         <Route path="/pricing-modal" element={<PricingSection />} />
 
-        <Route element={<AdministrationLayout />} >
-          <Route path="/admin" element={<SuperAdminDashboard />} />
+       {cookies.access_token && (isAdministration || cookies.isAdministration) &&  <Route element={<AdministrationLayout />} >
+          <Route path="/" element={<SuperAdminDashboard />} />
           <Route path="/admin-subscription" element={<SuperAdminSubscriptions />} />
-        </Route>
+        </Route>}
 
         {/* Protected Routes */}
-        {cookies.access_token && (
+        {cookies.access_token && !(isAdministration || cookies.isAdministration )&& (
           <Route path="/" element={<Layout />}>
             {handleRoutes(user?.user?.[0]?.plan).map((route, ind) => {
               const isAllowed =
