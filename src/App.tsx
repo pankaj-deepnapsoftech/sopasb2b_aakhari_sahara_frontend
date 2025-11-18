@@ -24,6 +24,8 @@ import { useGetLoggedInUserQuery } from "./redux/api/api";
 import { isSubscriptionEnd } from "./utils/dateModifyer";
 import { motion } from "motion/react";
 import SuperAdminDashboard from "./superAdmin/SuperAdminDashboard"
+import AdministrationLayout from "./superAdmin/layout/Administration.layout";
+import SuperAdminSubscriptions from "./superAdmin/SuperAdminSubscriptions";
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
@@ -121,7 +123,7 @@ const App: React.FC = () => {
       <ToastContainer />
       <Routes>
         {/* Public Routes (no token) */}
-        {!cookies.access_token && (
+        {cookies.access_token && (
           <Route element={<LandingLayout />}>
             {PublicRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
@@ -133,7 +135,11 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/subscription-end" element={<SessionExpired />} />
         <Route path="/pricing-modal" element={<PricingSection />} />
-        <Route path="/administrator" element={<SuperAdminDashboard/>}/>
+
+        <Route element={<AdministrationLayout />} >
+          <Route path="/admin" element={<SuperAdminDashboard />} />
+          <Route path="/admin-subscription" element={<SuperAdminSubscriptions />} />
+        </Route>
 
         {/* Protected Routes */}
         {cookies.access_token && (

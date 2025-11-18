@@ -28,9 +28,6 @@ const WIPProducts: React.FC = () => {
   const [searchKey, setSearchKey] = useState<string | undefined>();
   const [filteredData, setFilteredData] = useState<any>([]);
 
-  // Bulk upload menu
-
-
 
 
   const {
