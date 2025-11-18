@@ -16,7 +16,7 @@ const AdministrationLayout = () => {
       />
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 ml-0 lg:ml-64 p-4 bg-gray-100 min-h-screen">
+      <div className="flex-1 ml-0 lg:ml-64 p-4 bg-gray-100 min-h-screen overflow-auto">
 
         {/* Mobile Menu Button */}
         <button

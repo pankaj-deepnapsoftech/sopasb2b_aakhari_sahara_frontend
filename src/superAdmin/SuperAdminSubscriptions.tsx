@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { useCookies } from "react-cookie";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -12,8 +13,11 @@ const SuperAdminSubscriptions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const navigate = useNavigate();
+  const [cookies] = useCookies();
 
   // Fetch REAL API instead of dummy data
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,10 +32,11 @@ const SuperAdminSubscriptions = () => {
         const res = await axios.get(
           "http://localhost:9011/api/subscription/all-users-subscription",
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${cookies.access_token}` },
             withCredentials: true,
           }
         );
+        
 
         const rawUsers = Array.isArray(res.data?.data) ? res.data.data : [];
 

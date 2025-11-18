@@ -86,7 +86,7 @@ export default function PricingSection() {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ plan: plan.name, amount: amountInPaise, period: isYearly ? 'year' : 'month' }),
+        body: JSON.stringify({allowedUsers:plan?.users || 0, plan: plan.name, amount: amountInPaise, period: isYearly ? 'year' : 'month' }),
       });
 
       if (!createResp.ok) {
@@ -155,6 +155,7 @@ export default function PricingSection() {
       period: "",                    // ← Empty period for customize
       button: "Choose KONTROLIX",
       highlight: false,
+      users:5,
       features: [
         { name: "Dashboard Access", included: true },
         { name: "Sensors Integration", included: true },
@@ -195,6 +196,7 @@ export default function PricingSection() {
       period: "/month",
       button: "Choose SOPAS",
       highlight: true,
+      users:5,
       features: [
         { name: "Dashboard Access", included: true },
         { name: "Sensors Integration", included: false },
@@ -236,6 +238,7 @@ export default function PricingSection() {
       period: "",                    // ← Empty period
       button: "Choose RTPAS",
       highlight: false,
+      users:7,
       features: [
         { name: "Dashboard Access", included: true },
         { name: "Sensors Integration", included: true },
