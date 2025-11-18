@@ -197,8 +197,8 @@ const SuperAdminSubscriptions = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
+      <div className="w-[90%]">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Super Admin Subscriptions</h1>
@@ -228,7 +228,7 @@ const SuperAdminSubscriptions = () => {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-12 h- сказал12 bg-green-100 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <div className="w-6 h-6 bg-green-500 rounded-full"></div>
                 </div>
               </div>
