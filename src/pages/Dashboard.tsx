@@ -199,7 +199,6 @@ const Analytics: React.FC = () => {
           },
         }
       );
-
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -225,7 +224,7 @@ const Analytics: React.FC = () => {
   };
 
   // Fetch user details on mount
-  useEffect(() => {
+useEffect(() => {
     if (cookies?.access_token) {
       fetchUserDetails();
     } else {
@@ -235,7 +234,7 @@ const Analytics: React.FC = () => {
   }, [cookies?.access_token]);
 
   // Fetch sales data from API
-  const fetchSalesData = async () => {
+const fetchSalesData = async () => {
     setIsLoadingSales(true);
     try {
       const response = await fetch(
@@ -250,7 +249,6 @@ const Analytics: React.FC = () => {
           },
         }
       );
-
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -732,7 +730,6 @@ const Analytics: React.FC = () => {
         if (data.success) {
           setFinanceData(data);
 
-          console.log(data)
         } else {
           toast({
             title: "Error",
@@ -1004,7 +1001,8 @@ const Analytics: React.FC = () => {
   };
 
   // Sales Overview Data (fallback data)
-  const fallbackSalesData = [
+  const fallbackSalesData =
+   [
     { month: "Jan", value1: 8, value2: 12 },
     { month: "Feb", value1: 12, value2: 18 },
     { month: "Mar", value1: 6, value2: 15 },

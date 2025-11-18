@@ -10,12 +10,11 @@ import { isSubscriptionEnd } from "../utils/dateModifyer";
 
 export default function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
-   const {id } = useSelector((state: any) => state.auth);
-   const navigate = useNavigate();
-   const [cookies] = useCookies();
+  const { id } = useSelector((state: any) => state.auth);
+  const navigate = useNavigate();
+  const [cookies] = useCookies();
 
-
-   const getSavedUserId = () => {
+  const getSavedUserId = () => {
     const raw = sessionStorage.getItem("Auth-data");
     if (!raw) return null;
 
@@ -29,9 +28,9 @@ export default function PricingSection() {
 
   const userId = id || getSavedUserId();
 
-    const { data: user, isLoading } = useGetLoggedInUserQuery(
-      cookies.access_token ? userId : ""
-    );
+  const { data: user, isLoading } = useGetLoggedInUserQuery(
+    cookies.access_token ? userId : ""
+  );
 
   // Load Razorpay checkout script dynamically
   const loadRazorpayScript = () => {
@@ -54,12 +53,16 @@ export default function PricingSection() {
 
   // Handle payment when user clicks a plan's button
   const handleBuy = async (plan) => {
-    // Free trial or zero-priced plans: handle separately
+    // Special handling for KONTROLIX and RTPAS → redirect to support
+    if (plan.name === "KONTROLIX" || plan.name === "RTPAS") {
+      navigate("/support");
+      return;
+    }
+
+    // SOPAS → normal Razorpay flow
     const rawPrice = String(plan.price || "0").replace(/[^0-9]/g, "");
     const amountNumber = parseInt(rawPrice || "0", 10);
     if (!amountNumber || amountNumber === 0) {
-      // For free trial: redirect to signup or start trial flow
-      // For now, show a simple message — replace with real flow as needed
       alert(`${plan.name} is free. Start your free trial!`);
       return;
     }
@@ -70,14 +73,11 @@ export default function PricingSection() {
       return;
     }
 
-    // Amount should be in paise
     const amountInPaise = amountNumber * 100;
 
-    // Call backend to create an order and save it server-side
     try {
       const apiBase = process.env.REACT_APP_BACKEND_URL || '';
       const base = apiBase ? apiBase.replace(/\/$/, '') : '';
-      // try to read JWT from cookies (optional)
       const token = cookies.access_token || null;
 
       const createResp = await fetch(`${base}/subscription/create`, {
@@ -106,7 +106,6 @@ export default function PricingSection() {
         description: plan.name,
         order_id: orderId,
         handler: async function (response) {
-          // Send payment details to backend for verification
           try {
             const verifyResp = await fetch(`${base}/subscription/verify`, {
               method: 'POST',
@@ -130,14 +129,12 @@ export default function PricingSection() {
             const verifyJson = await verifyResp.json();
             if (verifyJson?.success) {
               alert('Payment successful and verified.');
-              window.location.href = "/"
-              // Optionally update UI / redirect
+              window.location.href = "/";
             } else {
               alert('Payment processed but verification failed.');
             }
           } catch (e) {
             alert('Payment verification failed: ' + e);
-            return;
           }
         },
         theme: { color: '#2563eb' },
@@ -145,7 +142,6 @@ export default function PricingSection() {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      // window.location.href = "/"
     } catch (e) {
       alert('Unable to start payment: ' + (e.message || e));
     }
@@ -153,11 +149,10 @@ export default function PricingSection() {
 
   // ✅ Individual Plan Data — each card fully independent
   const plansMonthly = [
-  
     {
       name: "KONTROLIX",
-      price: "₹999",
-      period: "/month",
+      price: "Customize",           // ← Changed to "Customize"
+      period: "",                    // ← Empty period for customize
       button: "Choose KONTROLIX",
       highlight: false,
       features: [
@@ -237,8 +232,8 @@ export default function PricingSection() {
     },
     {
       name: "RTPAS",
-      price: "₹4999",
-      period: "/month",
+      price: "Customize",           // ← Changed to "Customize"
+      period: "",                    // ← Empty period
       button: "Choose RTPAS",
       highlight: false,
       features: [
@@ -280,26 +275,28 @@ export default function PricingSection() {
   const plansYearly = plansMonthly.map((p) => ({
     ...p,
     price:
-      p.name === "Free Trial"
-        ? "₹0"
-        : `₹${parseInt(p.price.replace(/[₹,]/g, "")) * 10}`,
-    period: p.name === "Free Trial" ? "for 14 days" : "/year",
+      p.name === "SOPAS"
+        ? "₹19990"
+        : p.name === "KONTROLIX" || p.name === "RTPAS"
+        ? "Customize"
+        : p.price,
+    period: p.name === "SOPAS" ? "/year" : "",
   }));
 
   const plans = isYearly ? plansYearly : plansMonthly;
 
-  if(isLoading){
-    return "loading......."
+  if (isLoading) {
+    return "loading.......";
   }
 
   return (
     <section className="relative bg-gradient-to-b from-blue-100 to-white py-24 px-6">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-200/40 blur-3xl rounded-full"></div>
 
-      {/* 🔹 Global Close Button (top-right corner) */}
+      {/* 🔹 Global Close Button */}
       <button
         className="absolute top-6 right-6 bg-white/70 hover:bg-blue-100 p-2 rounded-full shadow-md transition"
-        onClick={() => navigate(isSubscriptionEnd(user?.user?.[0]?.subscription_end) ? "/subscription-end" : "/")} // 👉 Replace with your own logic
+        onClick={() => navigate(isSubscriptionEnd(user?.user?.[0]?.subscription_end) ? "/subscription-end" : "/")}
       >
         <X className="w-6 h-6 text-blue-700" />
       </button>
@@ -401,6 +398,9 @@ export default function PricingSection() {
                       >
                         {f.name}
                       </span>
+                    )}
+                    {typeof f.included === "string" && f.name === "Support Type" && (
+                      <span className="ml-8 font-medium">{f.included}</span>
                     )}
                   </li>
                 ))}

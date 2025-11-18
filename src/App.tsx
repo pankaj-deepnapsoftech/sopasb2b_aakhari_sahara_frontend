@@ -23,6 +23,7 @@ import SessionExpired from "./pages/SubscriptionEnd";
 import { useGetLoggedInUserQuery } from "./redux/api/api";
 import { isSubscriptionEnd } from "./utils/dateModifyer";
 import { motion } from "motion/react";
+import SuperAdminDashboard from "./superAdmin/SuperAdminDashboard"
 
 const App: React.FC = () => {
   const { allowedroutes, isSuper, id } = useSelector((state: any) => state.auth);
@@ -132,6 +133,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/subscription-end" element={<SessionExpired />} />
         <Route path="/pricing-modal" element={<PricingSection />} />
+        <Route path="/administrator" element={<SuperAdminDashboard/>}/>
 
         {/* Protected Routes */}
         {cookies.access_token && (
