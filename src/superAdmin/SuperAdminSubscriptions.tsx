@@ -14,6 +14,11 @@ const SuperAdminSubscriptions = () => {
   const [itemsPerPage] = useState(6);
   const navigate = useNavigate();
   const [cookies] = useCookies();
+  const [cardStats, setCardStats] = useState({
+  activePaid: 0,
+  freeTrial: 0,
+  expiredPaid: 0,
+});
 
   // Fetch REAL API instead of dummy data
 
@@ -24,10 +29,7 @@ const SuperAdminSubscriptions = () => {
       try {
         const token = localStorage.getItem("superAdminToken");
 
-        if (!token) {
-          toast.warn("Super Admin login required.");
-          // navigate('/super-admin-login');
-        }
+        
 
         const res = await axios.get(
           "http://localhost:9011/api/subscription/all-users-subscription",
@@ -52,7 +54,6 @@ const SuperAdminSubscriptions = () => {
 
         setData(mapped);
         setLoading(false);
-        toast.success("Subscription data loaded");
       } catch (err) {
         console.error("API Fetch Error:", err);
         toast.error("Failed to load subscription data");
@@ -65,6 +66,34 @@ const SuperAdminSubscriptions = () => {
   // ───────────────────────────────────────────────
   // Filters, search, pagination logic (same as before)
   // ───────────────────────────────────────────────
+
+  useEffect(() => {
+  const fetchCardStats = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:9011/api/subscription/admin-cards-data",
+        {
+          headers: { Authorization: `Bearer ${cookies.access_token}` },
+          withCredentials: true,
+        }
+      );
+
+      const apiData = res.data?.data || {};
+
+      setCardStats({
+        activePaid: apiData.activePaid || 0,
+        freeTrial: apiData.freeTrial || 0,
+        expiredPaid: apiData.expiredPaid || 0,
+      });
+
+    } catch (err) {
+      console.error("Card Stats API Error:", err);
+      toast.error("Failed to load dashboard subscription stats");
+    }
+  };
+
+  fetchCardStats();
+}, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -165,9 +194,9 @@ const SuperAdminSubscriptions = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           {/* Active Subscriptions */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-green-200 p-4 sm:p-6 shadow-xl">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <div className="w-6 h-6 bg-green-500 rounded-full"></div>
@@ -176,19 +205,15 @@ const SuperAdminSubscriptions = () => {
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Active Subscriptions
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {
-                    filteredData.filter(
-                      (item) => getDisplayStatus(item) === "Active Subscription"
-                    ).length
-                  }
+                <p className="text-xl sm:text-2xl font-bold text-green-500">
+                  {cardStats.activePaid}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Free Trials */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-blue-200 p-4 sm:p-6 shadow-xl">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
@@ -197,19 +222,15 @@ const SuperAdminSubscriptions = () => {
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Free Trials
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {
-                    filteredData.filter(
-                      (item) => getDisplayStatus(item) === "Free Trial"
-                    ).length
-                  }
+                <p className="text-xl sm:text-2xl font-bold text-blue-500">
+                  {cardStats.freeTrial}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Lifetime Plans */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+          {/* <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                 <div className="w-6 h-6 bg-purple-500 rounded-full"></div>
@@ -227,10 +248,10 @@ const SuperAdminSubscriptions = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Inactive / Expired */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white rounded-lg border border-red-200 p-4 sm:p-6 shadow-xl">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                 <div className="w-6 h-6 bg-red-500 rounded-full"></div>
@@ -239,14 +260,8 @@ const SuperAdminSubscriptions = () => {
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Inactive / Expired
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {
-                    filteredData.filter((item) =>
-                      ["Inactive", "Free Trial Expired"].includes(
-                        getDisplayStatus(item)
-                      )
-                    ).length
-                  }
+                <p className="text-xl sm:text-2xl font-bold text-red-500">
+                   {cardStats.expiredPaid}
                 </p>
               </div>
             </div>
@@ -278,7 +293,6 @@ const SuperAdminSubscriptions = () => {
                   </option>
                   <option value="Free Trial">Free Trial (Active)</option>
                   <option value="Free Trial Expired">Free Trial Expired</option>
-                  <option value="Lifetime Plan">Lifetime Plan</option>
                   <option value="Inactive">Inactive</option>
                 </select>
               </div>
