@@ -1,19 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SuperAdminSidebar from '../SuperAdminSidebar';
 import { Outlet } from 'react-router-dom';
 
 const AdministrationLayout = () => {
-  return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white">
-        <SuperAdminSidebar isOpen={true} onClose={() => {}} />
-      </aside>
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 bg-gray-100">
+  return (
+    <div className="flex min-h-screen overflow-hidden">
+
+      {/* Sidebar */}
+      <SuperAdminSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+
+      {/* MAIN CONTENT */}
+      <div className="flex-1 ml-0 lg:ml-64 p-4 bg-gray-100 min-h-screen">
+
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden mb-4 p-2 bg-gray-100 text-gray-500 rounded"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          ☰
+        </button>
+
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };

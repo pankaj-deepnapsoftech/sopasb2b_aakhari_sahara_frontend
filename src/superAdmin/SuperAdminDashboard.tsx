@@ -156,14 +156,15 @@ const SuperAdminDashboard = () => {
 
         {/* Stats */}
         {dashboardData && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-8">
             {[
               { label: "Total Admins", value: dashboardData.totalAdmins, color: "blue" },
-              { label: "Total Organizations", value: dashboardData.totalOrganizations, color: "green" },
-              { label: "Verified Admins", value: dashboardData.verifiedAdmins, color: "purple" },
-              { label: "Super Admins", value: dashboardData.superAdmins, color: "red" }
+              { label: "Free trial", value: dashboardData.totalOrganizations, color: "orange" },
+              { label: "Paid", value: dashboardData.verifiedAdmins, color: "green" },
+              { label: "Kontrolix Query", value: dashboardData.superAdmins, color: "red" },
+              { label: "Rtpas Query", value: dashboardData.superAdmins, color: "red" }
             ].map((stat, i) => (
-              <div key={i} className="bg-white p-6 rounded-lg shadow-md">
+              <div key={i} className="bg-white p-6 flex flex-col justify-between rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold text-gray-700">{stat.label}</h3>
                 <p className={`text-3xl font-bold text-${stat.color}-600 mt-2`}>{stat.value}</p>
               </div>
