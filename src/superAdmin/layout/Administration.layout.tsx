@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SuperAdminSidebar from '../SuperAdminSidebar';
 import { Outlet } from 'react-router-dom';
+import { IoMenu } from 'react-icons/io5';
 
 const AdministrationLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,10 +20,10 @@ const AdministrationLayout = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="lg:hidden mb-4 p-2 bg-gray-100 text-gray-500 rounded"
+          className="lg:hidden mb-4 p-2 bg-gray-200 text-gray-500 rounded"
           onClick={() => setIsSidebarOpen(true)}
         >
-          ☰
+          <IoMenu size={23} />
         </button>
 
         <Outlet />

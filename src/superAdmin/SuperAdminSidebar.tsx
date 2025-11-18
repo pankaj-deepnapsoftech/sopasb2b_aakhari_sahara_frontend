@@ -1,5 +1,7 @@
 //@ts-nocheck
 import React from "react";
+import { IoDiamondOutline } from "react-icons/io5";
+import { MdDashboard } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const SuperAdminSidebar = ({ isOpen, onClose }) => {
@@ -10,13 +12,13 @@ const SuperAdminSidebar = ({ isOpen, onClose }) => {
     {
       id: "dashboard",
       name: "Dashboard",
-      icon: "📊",
+      icon: <MdDashboard />,
       path: "/",
     },
     {
       id: "subscriptions",
       name: "Admin Subscriptions",
-      icon: "💎",
+      icon: <IoDiamondOutline />,
       path: "/admin-subscription",
     },
   ];
@@ -51,7 +53,7 @@ const SuperAdminSidebar = ({ isOpen, onClose }) => {
         <div className="flex justify-between items-center mb-6 lg:mb-10">
           <div>
             <h2 className="text-xl font-bold">Super Admin Panel</h2>
-            <p className="text-sm text-gray-400">CRM Management System</p>
+            <p className="text-sm text-gray-400">Management System</p>
           </div>
 
           {/* Mobile close button */}
