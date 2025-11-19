@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
-
 const SuperAdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [admins, setAdmins] = useState([]);
@@ -15,7 +14,6 @@ const SuperAdminDashboard = () => {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [superAdminProfile, setSuperAdminProfile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const [viewMode, setViewMode] = useState("cards");
   const [selectedAdminEmployees, setSelectedAdminEmployees] = useState([]);
   const [showEmployeesModal, setShowEmployeesModal] = useState(false);
@@ -25,7 +23,7 @@ const SuperAdminDashboard = () => {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      try {     
+      try {
         const res = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}subscription/admin-cards-data`,
           {
@@ -56,48 +54,43 @@ const SuperAdminDashboard = () => {
     fetchDashboardData();
   }, []);
 
- 
-
-
   useEffect(() => {
-  const fetchAdmins = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}subscription/all-users-subscription`,
-        {
-          headers: { Authorization: `Bearer ${cookies.access_token}` },
-          withCredentials: true,
-        }
-      );
+    const fetchAdmins = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}subscription/all-users-subscription`,
+          {
+            headers: { Authorization: `Bearer ${cookies.access_token}` },
+            withCredentials: true,
+          }
+        );
 
-      const raw = res.data?.data || [];
+        const raw = res.data?.data || [];
 
-      const mappedAdmins = raw.map((u) => ({
-        _id: u._id,
-        name: `${u.first_name} ${u.last_name}`,
-        email: u.email,
-        phone: u.phone,
-        role: "Super Admin", // important
-        verified: u.isVerified,
-        designation: "Super Admin",
-        subscriptionPlan: u.subscription?.plan || "Inactive",
-        createdAt: u.createdAt,
-      }));
+        const mappedAdmins = raw.map((u) => ({
+          _id: u._id,
+          name: `${u.first_name} ${u.last_name}`,
+          email: u.email,
+          phone: u.phone,
+          role: "Super Admin", // important
+          verified: u.isVerified,
+          designation: "Super Admin",
+          subscriptionPlan: u.subscription?.plan || "Inactive",
+          createdAt: u.createdAt,
+          
+        }));
+       
 
-      setAdmins(mappedAdmins);
-      console.log("Super Admins Loaded: ", mappedAdmins);
+        setAdmins(mappedAdmins);
+        console.log("Super Admins Loaded: ", mappedAdmins);
+      } catch (err) {
+        console.error("Admin Loading Error:", err);
+        toast.error("Failed to load super admin list");
+      }
+    };
 
-    } catch (err) {
-      console.error("Admin Loading Error:", err);
-      toast.error("Failed to load super admin list");
-    }
-  };
-
-  fetchAdmins();
-}, []);
-
-
-
+    fetchAdmins();
+  }, []);
 
   const logoutHandler = () => {
     try {
@@ -182,9 +175,11 @@ const SuperAdminDashboard = () => {
   };
 
   // Pagination
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(admins.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, admins.length);
+
   const currentAdmins = admins.slice(startIndex, endIndex);
 
   const handlePreviousPage = () =>
@@ -285,7 +280,7 @@ const SuperAdminDashboard = () => {
         </div>
 
         {/* View Toggle */}
-        {/* <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-8">
           <div className="bg-white rounded-lg shadow p-1 flex">
             <button
               onClick={() => setViewMode("cards")}
@@ -308,7 +303,7 @@ const SuperAdminDashboard = () => {
               Table View
             </button>
           </div>
-        </div> */}
+        </div>
 
         {/* Cards View */}
         {viewMode === "cards" && (
@@ -321,7 +316,7 @@ const SuperAdminDashboard = () => {
                   <div
                     key={admin._id}
                     className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 shadow hover:shadow-xl transition cursor-pointer border border-blue-200"
-                   // onClick={() => fetchEmployeesByAdmin(admin._id)}
+                    // onClick={() => fetchEmployeesByAdmin(admin._id)}
                   >
                     <div className="text-center">
                       <div className="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl font-bold">
@@ -365,12 +360,119 @@ const SuperAdminDashboard = () => {
 
         {/* Table View - Full version same as your original */}
         {viewMode === "table" && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            {/* Your full table code from original goes here - unchanged */}
-            {/* For brevity, it's the same complex table you had */}
-            <p className="p-10 text-center text-gray-500">
-              Table view loaded with dummy data (full UI same as original)
-            </p>
+          <div className="bg-white rounded-xl shadow-lg p-5">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              Admins Table
+            </h2>
+
+            {/* Table */}
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <table className="min-w-full bg-white text-sm">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs md:text-sm">
+                    <th className="px-3 py-2 text-left font-semibold">Name</th>
+                    <th className="px-3 py-2 text-left font-semibold">Email</th>
+                    <th className="px-3 py-2 text-left font-semibold">Phone</th>
+                    <th className="px-3 py-2 text-left font-semibold">
+                      Verified
+                    </th>
+                    <th className="px-3 py-2 text-left font-semibold">
+                      Subscription
+                    </th>
+                    <th className="px-3 py-2 text-left font-semibold">
+                      Created At
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="text-gray-700 text-xs md:text-sm">
+                  {currentAdmins.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="text-center py-6 text-gray-500 text-sm"
+                      >
+                        No Admins Found
+                      </td>
+                    </tr>
+                  ) : (
+                    currentAdmins.map((admin, index) => (
+                      <tr
+                        key={admin._id}
+                        className={`border-b transition-all ${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        } hover:bg-blue-50 cursor-pointer`}
+                      >
+                        <td className="px-3 py-2 font-medium">{admin.name}</td>
+                        <td className="px-3 py-2">{admin.email}</td>
+                        <td className="px-3 py-2">{admin.phone}</td>
+
+                        <td className="px-3 py-2">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] md:text-xs font-semibold ${
+                              admin.verified
+                                ? "bg-green-100 text-green-700 border border-green-200"
+                                : "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                            }`}
+                          >
+                            {admin.verified ? "Verified" : "Pending"}
+                          </span>
+                        </td>
+
+                        <td className="px-3 py-2">
+                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[10px] md:text-xs border border-blue-200">
+                            {admin.subscriptionPlan || "N/A"}
+                          </span>
+                        </td>
+
+                        <td className="px-3 py-2">
+                          {admin.createdAt?.slice(0, 10)}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-5">
+              <p className="text-gray-600 text-xs md:text-sm">
+                Showing <span className="font-semibold">{startIndex + 1}</span>{" "}
+                to{" "}
+                <span className="font-semibold">
+                  {Math.min(endIndex, admins.length)}
+                </span>{" "}
+                of <span className="font-semibold">{admins.length}</span>{" "}
+                results
+              </p>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1.5 rounded-md text-xs md:text-sm font-medium transition ${
+                    currentPage === 1
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white border hover:bg-gray-100"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1.5 rounded-md text-xs md:text-sm font-medium transition ${
+                    currentPage === totalPages
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white border hover:bg-gray-100"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
         )}
 

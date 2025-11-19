@@ -56,9 +56,6 @@ const SuperAdminSubscriptions = () => {
 
     fetchData();
   }, []);
-  // ───────────────────────────────────────────────
-  // Filters, search, pagination logic (same as before)
-  // ───────────────────────────────────────────────
 
   useEffect(() => {
     const fetchCardStats = async () => {
@@ -113,31 +110,38 @@ const SuperAdminSubscriptions = () => {
   };
 
   const filteredData = data.filter((item) => {
-    const displayStatus = getDisplayStatus(item);
-    return (
-      (item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        displayStatus.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (statusFilter === "all" || displayStatus === statusFilter) &&
-      item.role === "Super Admin"
-    );
+    const displayStatus = getDisplayStatus(item).trim().toLowerCase();
+    const selectedStatus = statusFilter.trim().toLowerCase();
+
+    // Search text match
+    const matchesSearch =
+      item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      displayStatus.includes(searchTerm.toLowerCase());
+
+    // Status filter match
+    const matchesStatus =
+      selectedStatus === "all" || displayStatus === selectedStatus;
+
+    return matchesSearch && matchesStatus && item.role === "Super Admin";
   });
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
   const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case "Active Subscription":
+    switch (status.toLowerCase()) {
+      case "active subscription":
         return "bg-green-100 text-green-800";
-      case "Free Trial":
+      case "free trial":
         return "bg-blue-100 text-blue-800";
-      case "Free Trial Expired":
+      case "free trial expired":
         return "bg-orange-100 text-orange-800";
-      case "Lifetime Plan":
+      case "lifetime plan":
         return "bg-purple-100 text-purple-800";
-      case "Inactive":
+      case "inactive":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -221,27 +225,6 @@ const SuperAdminSubscriptions = () => {
             </div>
           </div>
 
-          {/* Lifetime Plans */}
-          {/* <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <div className="w-6 h-6 bg-purple-500 rounded-full"></div>
-              </div>
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-gray-600">
-                  Lifetime Plans
-                </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
-                  {
-                    filteredData.filter(
-                      (item) => getDisplayStatus(item) === "Lifetime Plan"
-                    ).length
-                  }
-                </p>
-              </div>
-            </div>
-          </div> */}
-
           {/* Inactive / Expired */}
           <div className="bg-white rounded-lg border border-red-200 p-4 sm:p-6 shadow-xl">
             <div className="flex items-center gap-4">
@@ -280,12 +263,12 @@ const SuperAdminSubscriptions = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 >
                   <option value="all">All Status</option>
-                  <option value="Active Subscription">
+                  <option value="active subscription">
                     Active Subscription
                   </option>
-                  <option value="Free Trial">Free Trial (Active)</option>
-                  <option value="Free Trial Expired">Free Trial Expired</option>
-                  <option value="Inactive">Inactive</option>
+                  <option value="free trial">Free Trial</option>
+                  <option value="free trial expired">Free Trial Expired</option>
+                  <option value="inactive">Inactive</option>
                 </select>
               </div>
               <div className="flex-shrink-0">
@@ -306,16 +289,16 @@ const SuperAdminSubscriptions = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">
                     S.No
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
                     Super Admin
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
+                  <th className="px-5 py-3 text-left text-xs font-medium text-gray-500">
                     Subscription
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
+                  <th className="px-5 py-3 text-left text-xs font-medium text-gray-500">
                     Phone
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
@@ -337,7 +320,7 @@ const SuperAdminSubscriptions = () => {
                 ) : (
                   currentData.map((item, index) => (
                     <tr key={item._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">{startIndex + index + 1}</td>
+                      <td className="px-4 py-4">{startIndex + index + 1}</td>
 
                       <td className="px-6 py-4">
                         <div className="flex items-center">
@@ -355,9 +338,9 @@ const SuperAdminSubscriptions = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-4">
+                      <td className="px-5 py-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs ${getStatusColor(
+                          className={`px-3 py-1 rounded-full text-[10px] ${getStatusColor(
                             getDisplayStatus(item)
                           )}`}
                         >
@@ -365,7 +348,7 @@ const SuperAdminSubscriptions = () => {
                         </span>
                       </td>
 
-                      <td className="px-6 py-4">{item.phone}</td>
+                      <td className="px-5 py-4">{item.phone}</td>
 
                       <td className="px-6 py-4">
                         {new Date(item.createdAt).toLocaleDateString()}
@@ -378,7 +361,80 @@ const SuperAdminSubscriptions = () => {
           </div>
 
           {/* PAGINATION */}
-          {/* --- unchanged --- */}
+          {totalPages > 1 && (
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+              <div className="flex-1 flex justify-between sm:hidden">
+                <button
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    Showing{" "}
+                    <span className="font-medium">{startIndex + 1}</span> to{" "}
+                    <span className="font-medium">
+                      {Math.min(endIndex, filteredData.length)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-medium">{filteredData.length}</span>{" "}
+                    results
+                  </p>
+                </div>
+                <div>
+                  <nav
+                    className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                    aria-label="Pagination"
+                  >
+                    <button
+                      onClick={() =>
+                        setCurrentPage(Math.max(1, currentPage - 1))
+                      }
+                      disabled={currentPage === 1}
+                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    {getPageNumbers().map((pageNum) => (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                          currentPage === pageNum
+                            ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                            : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() =>
+                        setCurrentPage(Math.min(totalPages, currentPage + 1))
+                      }
+                      disabled={currentPage === totalPages}
+                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
