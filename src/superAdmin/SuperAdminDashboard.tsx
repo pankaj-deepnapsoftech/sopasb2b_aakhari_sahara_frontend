@@ -27,7 +27,7 @@ const SuperAdminDashboard = () => {
     const fetchDashboardData = async () => {
       try {     
         const res = await axios.get(
-          "http://localhost:9011/api/subscription/admin-cards-data",
+          `${process.env.REACT_APP_BACKEND_URL}subscription/admin-cards-data`,
           {
             headers: { Authorization: `Bearer ${cookies.access_token}` },
             withCredentials: true,
@@ -63,7 +63,7 @@ const SuperAdminDashboard = () => {
   const fetchAdmins = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:9011/api/subscription/all-users-subscription",
+        `${process.env.REACT_APP_BACKEND_URL}subscription/all-users-subscription`,
         {
           headers: { Authorization: `Bearer ${cookies.access_token}` },
           withCredentials: true,

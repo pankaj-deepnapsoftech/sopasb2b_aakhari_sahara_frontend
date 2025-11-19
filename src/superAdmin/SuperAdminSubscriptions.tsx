@@ -15,30 +15,23 @@ const SuperAdminSubscriptions = () => {
   const navigate = useNavigate();
   const [cookies] = useCookies();
   const [cardStats, setCardStats] = useState({
-  activePaid: 0,
-  freeTrial: 0,
-  expiredPaid: 0,
-});
+    activePaid: 0,
+    freeTrial: 0,
+    expiredPaid: 0,
+  });
 
   // Fetch REAL API instead of dummy data
-
-  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("superAdminToken");
-
-        
-
         const res = await axios.get(
-          "http://localhost:9011/api/subscription/all-users-subscription",
+          `${process.env.REACT_APP_BACKEND_URL}subscription/all-users-subscription`,
           {
             headers: { Authorization: `Bearer ${cookies.access_token}` },
             withCredentials: true,
           }
         );
-        
 
         const rawUsers = Array.isArray(res.data?.data) ? res.data.data : [];
 
@@ -68,32 +61,31 @@ const SuperAdminSubscriptions = () => {
   // ───────────────────────────────────────────────
 
   useEffect(() => {
-  const fetchCardStats = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:9011/api/subscription/admin-cards-data",
-        {
-          headers: { Authorization: `Bearer ${cookies.access_token}` },
-          withCredentials: true,
-        }
-      );
+    const fetchCardStats = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}subscription/admin-cards-data`,
+          {
+            headers: { Authorization: `Bearer ${cookies.access_token}` },
+            withCredentials: true,
+          }
+        );
 
-      const apiData = res.data?.data || {};
+        const apiData = res.data?.data || {};
 
-      setCardStats({
-        activePaid: apiData.activePaid || 0,
-        freeTrial: apiData.freeTrial || 0,
-        expiredPaid: apiData.expiredPaid || 0,
-      });
+        setCardStats({
+          activePaid: apiData.activePaid || 0,
+          freeTrial: apiData.freeTrial || 0,
+          expiredPaid: apiData.expiredPaid || 0,
+        });
+      } catch (err) {
+        console.error("Card Stats API Error:", err);
+        toast.error("Failed to load dashboard subscription stats");
+      }
+    };
 
-    } catch (err) {
-      console.error("Card Stats API Error:", err);
-      toast.error("Failed to load dashboard subscription stats");
-    }
-  };
-
-  fetchCardStats();
-}, []);
+    fetchCardStats();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -261,7 +253,7 @@ const SuperAdminSubscriptions = () => {
                   Inactive / Expired
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-red-500">
-                   {cardStats.expiredPaid}
+                  {cardStats.expiredPaid}
                 </p>
               </div>
             </div>
